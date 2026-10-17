@@ -1,0 +1,1 @@
+{"workflow": "weekly-fold-readiness", "ts": "2026-10-17T03:06:55Z", "status": "PASS", "learnings_total": 94, "unconsumed_est": 2, "changelog_last": "2026-10-16T19:22:30Z", "note": "readiness only; the fold itself runs locally (agent + eval)"}
