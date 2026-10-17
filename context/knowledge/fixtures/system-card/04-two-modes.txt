@@ -1,0 +1,5 @@
+# EXPECT: reject
+INTENT     : a card with an ambiguous mode
+MODE       : EXPLORATION | HYBRID
+RISK       : 3
+ROOT TYPE  : DECIDE

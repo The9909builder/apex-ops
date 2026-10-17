@@ -1,0 +1,2 @@
+# EXPECT: apex
+# INTENT: decompose my goal of launching a paid newsletter into what to learn, decide, and build

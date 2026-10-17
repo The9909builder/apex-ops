@@ -1,0 +1,3 @@
+# EXPECT: reject
+BUDGET     : leaves<=4 tokens<=60000 overrun: warn
+BLACKBOARD: /home/roshish/.apex/journal/.blackboard-demo.json

@@ -1,0 +1,5 @@
+# EXPECT: reject
+COUNCIL: D5 (2 candidates)
+- C1 [reversibility-first] score 9: safest, fully reversible
+- C2 [cost-first] score 5: cheapest but locks the schema
+WINNER: C2

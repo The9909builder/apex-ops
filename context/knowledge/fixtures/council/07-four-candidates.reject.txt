@@ -1,0 +1,7 @@
+# EXPECT: reject
+COUNCIL: D7 (4 candidates)
+- C1 [reversibility-first] score 7: staged
+- C2 [cost-first] score 6: reuse pipeline
+- C3 [speed-first] score 8: single pass
+- C4 [risk-first] score 5: adversarial review first
+WINNER: C3

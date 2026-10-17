@@ -1,0 +1,10 @@
+# EXPECT: reject
+## SYSTEM CARD
+
+ACTOR: roshish
+GOAL: ship a card with no governance fields
+DOMAIN: ai
+OUTPUT: a draft card
+CONSTRAINTS: none stated
+SUCCESS: draft accepted
+EXTRACTION_METHOD: clean

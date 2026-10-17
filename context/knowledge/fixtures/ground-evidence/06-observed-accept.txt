@@ -1,0 +1,7 @@
+# EXPECT: accept
+GROUNDED   : YES
+  ACTOR    : roshish
+  COST     : 1 run, 40s
+  EVIDENCE : run 3 of scripts/selftest.py printed "STATUS: PASS" at 09:12 UTC; log kept at /tmp/opencode/selftest-3.log
+  Crux     : single MECHANISM gap in the resume path
+  Verdict  : YES

@@ -1,0 +1,5 @@
+# EXPECT: reject
+INTENT     : a card with an out-of-set root type
+MODE       : EXECUTION
+RISK       : 2
+ROOT TYPE  : PLAN

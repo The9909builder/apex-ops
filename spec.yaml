@@ -1,0 +1,230 @@
+id: apex
+name: APEX
+version: 1.6.0
+category: pattern
+archetype: workflow
+description: |
+  Unified pyramid router. Decodes any intent into a typed task tree
+  (LEARN/DECIDE/GENERATE/RESEARCH/BUILD/SHIP/LEVERAGE), grounds the root and every
+  BUILD/LEVERAGE branch point, routes each leaf to the right donor skill already installed,
+  fuses bottom-up through a shared blackboard with contradiction gates, and emits a wave plan.
+  Routes past the curated donor table through a generated catalog of every installed skill
+  (scripts/donor-catalog.py), composes donors in single->pair->chain ladders capped at 3, and
+  hands BUILD leaves to autovibe with a CONTEXT ENVELOPE it consumes as its ANCESTRY source.
+  Invoke when an intent spans multiple domains no single skill covers, or when the user asks
+  which skills should handle a goal and in what order.
+
+triggers:
+  - user invokes /apex on any intent or says run apex on this
+  - intent spans multiple domains like learn plus decide plus build plus research
+  - user asks which skills should handle their goal and in what order
+
+model_tier: sonnet
+priority: 60
+
+owns:
+  - intent decoding into typed task trees
+  - donor routing per leaf node
+  - blackboard state across the run
+  - contradiction gating at fusion points
+  - wave planning from fused root
+  - installed-skill-catalog-reach
+  - caller-context-envelope-handoff
+
+does_not_own:
+  - code execution -> think-pipeline / autovibe
+  - shipping -> ship / land-and-deploy
+  - teaching -> deep-understanding
+  - vault persistence -> kraken (--deep only)
+
+pairs_with:
+  - skill: vague-to-system
+    direction: before
+    reason: supplies the System Card consumed verbatim at Stage 0 DECODE
+  - skill: super-reasoner
+    direction: parallel
+    reason: Phase 0 malformation scan runs inside DECODE; contested DECIDE leaves route back to it
+  - skill: realthink
+    direction: parallel
+    reason: real messy situations route as DECIDE leaves through its GROUND->CRUX->CUT chain
+  - skill: think-pipeline
+    direction: after
+    reason: BUILD leaves fill its 7 slots before autovibe compiles
+  - skill: autovibe
+    direction: after
+    reason: receives the compiled BUILD pack from the deepest BUILD leaf and the CONTEXT ENVELOPE (root intent verbatim, crux, DELTA lines, artifacts, constraints) that feeds autovibe's ANCESTRY packet source
+  - skill: deep-understanding
+    direction: parallel
+    reason: LEARN leaves must name a specific gap for its gap engine to fire
+  - skill: genesis
+    direction: parallel
+    reason: GENERATE leaves run its explode + Goldilocks filter
+  - skill: frontier-vision
+    direction: parallel
+    reason: RESEARCH/frontier leaves produce its falsifiable scenarios with numeric edges
+  - skill: intent-to-goal
+    direction: after
+    reason: Stage 5 PLAN converts the fused root into a goal-completion condition via it
+
+requires: []
+
+sharp_edges:
+  - id: absorbing-donor-text
+    summary: Copying donor text into APEX instead of invoking donors fresh
+    severity: critical
+    situation: When routing a leaf, pasting the donor's protocol into APEX output instead of reading its SKILL.md at route time
+    why: |
+      Absorbed copies freeze while the donor upgrades. The router rots into a monolith
+      that no donor upgrade can reach, which defeats the entire compose-donors design.
+    solution: |
+      Read the donor SKILL.md at route time and execute its protocol fresh.
+      Reference, never paste. Report missing donors in CLOSE.
+    symptoms:
+      - Donor content appears verbatim in APEX output
+      - Donor upgrades change behavior everywhere except inside APEX runs
+    red_flags:
+      - "APEX response contains sections copied from another SKILL.md"
+
+  - id: generating-downstream-of-no-ground
+    summary: Producing output downstream of a NO ground verdict
+    severity: critical
+    situation: GROUND returns Verdict NO but decomposition or routing continues anyway
+    why: |
+      One fabricated field compounds into a polished wrong artifact when every downstream
+      stage inherits the ungrounded premise. The halt is the gate that makes grounding real.
+    solution: |
+      Halt at the first NO. Mark the subtree UNGROUNDED and set it aside.
+      Emit BLOCKED with the exact missing field. Run GROUND-RECOVERY once before giving up.
+    symptoms:
+      - "TREE appears in a response whose GROUNDED line reads NO"
+      - Fabricated actor/cost/evidence fields
+    red_flags:
+      - Any stage artifact produced after a NO verdict
+
+  - id: build-dominates-silent-skips
+    summary: One branch (usually BUILD) dominates while LEARN/DECIDE leaves are silently skipped
+    severity: high
+    situation: Multi-leaf run where only BUILD leaves executed and CLOSE lists no skips
+    why: |
+      Skipped gates are invisible unless named. A multi-leaf run with zero SKIPPED lines
+      hides exactly the leaves whose absence will bite after ship.
+    solution: |
+      CLOSE must show every skip with its reason. Zero SKIPPED lines on a multi-leaf run is suspect.
+    symptoms:
+      - "CLOSE block has no SKIPPED section on a multi-department tree"
+    red_flags:
+      - "All routed donors belong to one node type"
+
+  - id: fusing-by-blending
+    summary: Fusing conflicting children by blending instead of routing a tie-break DECIDE
+    severity: high
+    situation: Two sibling outputs conflict at a FUSE point and the router averages them
+    why: |
+      Averaging contradictory outputs produces an option nobody chose. Contradiction is
+      signal: it demands a falsifiable tie-break, not a compromise.
+    solution: |
+      Route a tie-break DECIDE node with falsifiability conditions. Record the resolution,
+      then synthesize.
+    symptoms:
+      - Synthesis contains a midpoint value between two conflicting recommendations
+    red_flags:
+      - "'blend', 'average', or 'balance both' appears in a FUSE synthesis line"
+
+  - id: catalog-blind-routing
+    summary: A leaf with no curated donor routes to direct execution while a matching installed skill exists unqueried
+    severity: medium
+    situation: A leaf's terms match a skill installed on the machine, but the router consults only the curated table and declares the leaf unroutable
+    why: |
+      The curated table is a floor, not a ceiling. On 2026-10-15 the machine hosted 173 skills;
+      intents about video reels, design systems, or QA could not route though matching skills
+      were one catalog query away. Direct execution is the one thing a router must never do:
+      it authors content by definition.
+    solution: |
+      Before declaring a leaf unroutable, run scripts/donor-catalog.py query; route the best
+      hit whose gate shows inline and mark the NODE line (catalog). Curated donors still win
+      on equal fit.
+    symptoms:
+      - "CLOSE lists a SKIPPED leaf with reason 'no donor' while the catalog has a hit for its terms"
+      - "No (catalog) NODE line exists anywhere though the intent is outside the curated table"
+    red_flags:
+      - "A matching installed skill exists and ROUTE fell back to direct execution"
+
+phases:
+  - name: DECODE
+    artifact: "System Card (INTENT/MODE/RISK/NODE TYPE/ASSUMPTIONS)"
+    acceptance: "output contains 'INTENT     :' line and MODE is exactly one of EXPLORATION|HYBRID|EXECUTION"
+  - name: GROUND
+    artifact: "GROUNDED block with ACTOR/COST/EVIDENCE/Crux/Verdict"
+    acceptance: "Verdict YES requires actor+cost+evidence lines present; Verdict NO halts as BLOCKED before TREE"
+  - name: DECOMPOSE
+    artifact: "typed tree plus acyclic dependency list"
+    acceptance: "every node labeled [TYPE]; depth <= 3; branching <= 4; 'DEPS:' line present"
+  - name: ROUTE
+    artifact: "per-leaf donor blocks prefixed NODE <id> [TYPE] -> <donor>"
+    acceptance: "output `NODE` lines each name an installed donor; each shows the donor gate passing inline; catalog-only routes carry `(catalog)`; missing donors appear in `CLOSE`"
+  - name: FUSE
+    artifact: "`FUSE <node-id>: N contradictions found, M resolved, synthesis:`"
+    acceptance: "output contains an `FUSE ROOT:` line whose contradiction count is stated even when zero; unresolved conflicts block the parent"
+  - name: PLAN
+    artifact: "wave plan W1/W2/W3 each with its own acceptance command"
+    acceptance: "output contains a `PLAN:` line; W1 step names a command that exits 0 on this machine this week"
+  - name: CLOSE
+    artifact: "`CLOSE` block: GATES FIRED / SKIPPED / BLACKBOARD / HANDOFFS / STATUS"
+    acceptance: "output contains a `CLOSE` header, a `STATUS:` line matching DONE|DONE_WITH_CONCERNS|BLOCKED|NEEDS_CONTEXT, and SKIPPED reasons present on multi-leaf runs"
+
+required_sections:
+  - "INTENT     :"
+  - "GROUNDED   :"
+  - "TREE:"
+  - "DEPS:"
+  - "ROUTE"
+  - "FUSE"
+  - "CLOSE"
+
+scaffold_template: |
+  INTENT     : <one sentence>
+  MODE       : EXPLORATION | HYBRID | EXECUTION
+  RISK       : 0-10
+  ROOT TYPE  : LEARN | DECIDE | GENERATE | RESEARCH | BUILD | SHIP | LEVERAGE
+
+  GROUNDED   : YES actor+cost+evidence | NO -> HALTED (needed: ...)
+
+  TREE:
+  ROOT <id> [<TYPE>] non-leaf
+  |- A <question> [LEARN]    LEAF deep-understanding
+
+  DEPS: A->B
+
+  ROUTE
+  NODE A [LEARN] -> <donor>: <donor's own gate shown passing>
+  NODE D [GENERATE] -> <catalog-skill> (catalog): <its gate shown passing>
+
+  FUSE ROOT: N contradictions found, M resolved, synthesis: ...
+
+  PLAN: W1 ... W2 ... (each wave has an acceptance command)
+
+  CLOSE
+  GATES FIRED: [...]
+  SKIPPED: [stage: reason]
+  BLACKBOARD: <path>
+  HANDOFFS: [...]
+  STATUS: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+
+imports: []
+
+can_execute_without_mcp: true
+
+tags:
+  - router
+  - orchestration
+  - decomposition
+  - composition
+  - catalog
+  - handoff-envelope
+
+layer: 2
+complexity: medium
+
+freshness_horizon:
+  eval_days: 45
+  evolution_days: 90

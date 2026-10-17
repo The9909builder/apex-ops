@@ -1,0 +1,13 @@
+# EXPECT: accept
+## SYSTEM CARD
+
+ACTOR: roshish
+GOAL: record the restore drill finding so the next restore does not rediscover it
+DOMAIN: devops
+OUTPUT: the drill finding note in the journal
+CONSTRAINTS: none stated
+SUCCESS: the next restore applies WAL re-apply from the checklist
+EXTRACTION_METHOD: interrogated
+MODE: EXECUTION
+RISK: 2
+ROOT TYPE: SHIP

@@ -1,0 +1,17 @@
+{
+  "$id": "apex-capability/v1",
+  "version": "1.0",
+  "description": "Least-privilege capability envelopes per leaf TYPE. A routed spawn declares {read-only|write|exec} plus the dirs it may touch; these defaults are the floor: a leaf may narrow, never widen without an explicit HYBRID acceptance.",
+  "roots": { "$OUT": "/tmp/opencode", "$REPO": "<run target dir>" },
+  "rule": "write requires cap write or exec AND the path under a declared write dir; exec requires cap exec AND the path under a declared exec dir; read is open.",
+  "envelopes": {
+    "LEARN":    { "cap": "read-only", "write_dirs": [], "exec_dirs": [] },
+    "RESEARCH": { "cap": "read-only", "write_dirs": [], "exec_dirs": [] },
+    "DECIDE":   { "cap": "read-only", "write_dirs": [], "exec_dirs": [] },
+    "LEVERAGE": { "cap": "read-only", "write_dirs": [], "exec_dirs": [] },
+    "GENERATE": { "cap": "write", "write_dirs": ["$OUT"], "exec_dirs": [] },
+    "BUILD":    { "cap": "exec", "write_dirs": ["$OUT", "$REPO"], "exec_dirs": ["$REPO"] },
+    "SHIP":     { "cap": "exec", "write_dirs": ["$OUT", "$REPO"], "exec_dirs": ["$REPO"] }
+  },
+  "mechanical_checker": "scripts/capability-guard.py"
+}

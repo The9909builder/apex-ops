@@ -1,0 +1,7 @@
+# EXPECT: reject
+GROUNDED   : YES
+  ACTOR    : roshish
+  COST     : five minutes
+  EVIDENCE : per engineering, this should work in production
+  Crux     : unclear
+  Verdict  : YES

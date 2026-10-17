@@ -1,0 +1,55 @@
+name: nightly-donor-health
+on:
+  schedule:
+    - cron: "47 18 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ops-artifacts
+  cancel-in-progress: false
+jobs:
+  donor-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: donor health check
+        run: |
+          python3 scripts/donor-health.py --json check-all > /tmp/health.json
+          cat /tmp/health.json
+      - name: build row
+        if: always()
+        run: |
+          python3 -c "import sys,textwrap;exec(textwrap.dedent(sys.stdin.read()))" <<'PY'
+          import json, os, datetime
+          row = {"workflow": "nightly-donor-health",
+                 "ts": datetime.datetime.now(datetime.timezone.utc)
+                       .strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "status": "PASS" if os.path.exists("/tmp/health.json") else "FAIL"}
+          if os.path.exists("/tmp/health.json"):
+              try:
+                  data = json.load(open("/tmp/health.json"))
+                  row["donors"] = data if isinstance(data, dict) else len(data)
+              except Exception:
+                  row["donors"] = "unparsed"
+          json.dump(row, open("/tmp/row.json", "w"))
+          print(json.dumps(row))
+          PY
+      - name: push row to ops-artifacts branch
+        if: always()
+        run: |
+          set -e
+          git config user.name "apex-ops-bot"
+          git config user.email "apex-ops@users.noreply.github.com"
+          git fetch origin ops-artifacts || true
+          if git show-ref --verify --quiet refs/remotes/origin/ops-artifacts; then
+            git checkout -B ops-artifacts origin/ops-artifacts
+          else
+            git checkout --orphan ops-artifacts
+            git rm -rf --cached . >/dev/null 2>&1 || true
+          fi
+          mkdir -p ops-artifacts
+          cp /tmp/row.json ops-artifacts/nightly-donor-health.json
+          git add ops-artifacts
+          git commit -m "donor-health row $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git push origin ops-artifacts

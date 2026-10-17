@@ -1,0 +1,4 @@
+# EXPECT: reject
+INTENT     : demo run that never declared caps
+GROUNDED   : YES actor+cost+evidence
+BLACKBOARD: /home/roshish/.apex/journal/.blackboard-demo.json

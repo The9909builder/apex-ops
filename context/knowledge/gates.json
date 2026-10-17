@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "updated": "2026-10-16",
+  "source_of_truth": "context/knowledge/donor-routing.md",
+  "note": "Single manifest for donor gate keywords (W1/B1.2). Consumed only via scripts/gate_registry.py. keywords = any-of markers expected in the donor's own SKILL.md (donor-health, check-donor-sync). route_evidence = any-of markers expected in a run's ROUTE block for this donor (check-receipts); falls back to keywords when absent.",
+  "donors": {
+    "deep-understanding": {
+      "kind": "curated",
+      "keywords": ["gap"]
+    },
+    "super-reasoner": {
+      "kind": "curated",
+      "keywords": ["falsif", "malformation"]
+    },
+    "realthink": {
+      "kind": "curated",
+      "keywords": ["lever", "grounded", "crux", "ground"]
+    },
+    "genesis": {
+      "kind": "curated",
+      "keywords": ["goldilock", "ideas", "explode", "ranked"]
+    },
+    "frontier-vision": {
+      "kind": "curated",
+      "keywords": ["edge", "scenario"]
+    },
+    "think-pipeline": {
+      "kind": "curated",
+      "keywords": ["slot", "w1"]
+    },
+    "autovibe": {
+      "kind": "curated",
+      "keywords": ["compile", "w1"]
+    },
+    "vague-to-system": {
+      "kind": "curated",
+      "keywords": ["system card", "classify"]
+    },
+    "intent-to-goal": {
+      "kind": "curated",
+      "keywords": ["goal", "completion"]
+    },
+    "ship": {
+      "kind": "curated",
+      "keywords": ["ship"],
+      "route_evidence": ["out of scope"]
+    },
+    "land-and-deploy": {
+      "kind": "curated",
+      "keywords": ["deploy"],
+      "route_evidence": ["out of scope"]
+    },
+    "reel-forge": {
+      "kind": "catalog",
+      "keywords": ["reel"],
+      "route_evidence": ["film-ready", "delivery notes"]
+    },
+    "design-html": {
+      "kind": "catalog",
+      "keywords": ["pretext"],
+      "route_evidence": ["external refs", "self-contained html"]
+    },
+    "doc-writer": {
+      "kind": "catalog",
+      "keywords": ["readme", "audit"],
+      "route_evidence": ["match shipped state", "readme", "audit"]
+    },
+    "sealed-substrate-architect": {
+      "kind": "curated",
+      "keywords": ["certified", "typed kernel"],
+      "route_evidence": ["certified", "ledgered"]
+    },
+    "reason": {
+      "kind": "curated",
+      "keywords": ["ground", "recursive"],
+      "route_evidence": ["recursive", "ground"]
+    },
+    "human-operating-system": {
+      "kind": "curated",
+      "keywords": ["autopoietic", "operating system"],
+      "route_evidence": ["autopoietic", "ground truth"]
+    }
+  }
+}

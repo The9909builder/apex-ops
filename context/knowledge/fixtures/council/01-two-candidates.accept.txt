@@ -1,0 +1,5 @@
+# EXPECT: accept
+COUNCIL: D1 (2 candidates)
+- C1 [reversibility-first] score 8: cheap to undo, ships behind a flag
+- C2 [speed-first] score 6: forward-only rewrite, no rollback path
+WINNER: C1

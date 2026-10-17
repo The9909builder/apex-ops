@@ -1,0 +1,4 @@
+# EXPECT: reject
+COUNCIL: D3 (1 candidate)
+- C1 [speed-first] score 9: obvious path, nothing else viable
+WINNER: C1

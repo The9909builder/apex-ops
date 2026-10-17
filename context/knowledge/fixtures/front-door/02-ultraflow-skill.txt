@@ -1,0 +1,2 @@
+# EXPECT: ultraflow
+# INTENT: turn my messy notes about a gym habit tracker into a reusable skill

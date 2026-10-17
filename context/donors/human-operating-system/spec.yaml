@@ -1,0 +1,245 @@
+id: human-operating-system
+name: Human Operating System (HOS)
+version: 1.0.0
+category: pattern
+archetype: hybrid
+description: |
+  Operate a life or project as an autopoietic system: observe through the Markov
+  blanket, orient on Centers of wholeness, decide at Meadows leverage points, act
+  with the 15 properties of living structure, and integrate through Middle Way
+  provisionality. Load this skill when the task is turning abstract principles
+  (FEP, systems dynamics, Alexander, finitude) into precise operational
+  interventions on a human system, or diagnosing why a life system keeps
+  oscillating, thinning, or burning out.
+triggers:
+  - map a life problem as a system with stocks and flows
+  - keep oscillating between extremes and want equilibrium instead
+  - design an intervention that matches the scale of the problem
+  - why does being more efficient make me busier not freer
+  - apply the fifteen properties of living structure to my project
+  - audit my week for reinforcing loops of obsession or fear
+  - turn autopoiesis and the free energy principle into a daily protocol
+  - diagnose why my system keeps burning out despite fixes
+model_tier: opus
+priority: 70
+owns:
+  - hos-five-loop-pipeline
+  - hos-center-orientation
+  - hos-leverage-diagnosis
+  - hos-property-driven-action
+  - hos-middle-way-integration
+does_not_own: clinical or psychiatric treatment; medical diagnosis; financial advice
+pairs_with:
+  - skill-id: kraken-flow
+    direction: before
+    reason: Kraken grounds the crux before Loop 1 observes; an ungrounded HOS run models the wrong system.
+  - skill-id: think-pipeline
+    direction: parallel
+    reason: Think-pipeline fills the 7-slot schema HOS uses to structure Orientation and Decision outputs.
+  - skill-id: realthink
+    direction: parallel
+    reason: Realthink supplies the real-problem lens HOS Loop 1 needs to observe states as they are, not as the model expects.
+  - skill-id: deep-understanding
+    direction: after
+    reason: After an intervention, deep-understanding converts the updated generative model into transfer-checked knowledge.
+  - skill-id: system-optimizer
+    direction: after
+    reason: HOS Loop 3 names the leverage point; system-optimizer applies measured hardware or workflow optimizations at that point.
+  - skill: kraken-flow
+    direction: before
+    reason: Kraken grounds the crux before Loop 1 observes; an ungrounded HOS run models the wrong system
+requires: []
+sharp_edges:
+  - id: linear-fix-trap
+    summary: Applying a numbers-level fix to a paradigm-level problem amplifies the problem
+    severity: critical
+    situation: A failing system gets a quick parametric patch (the pesticide move)
+    why: |
+      Meadows' spruce budworm pattern: spraying kills the predator balancing
+      loop, so outbreaks return larger. Linear fixes on non-linear loops
+      accidentally destroy the very feedback that kept the system stable.
+    solution: |
+      Before any intervention, name the loop type at the leverage point. If the
+      problem is a reinforcing loop or a paradigm, intervene on information
+      flows, rules, or goals first; only touch numbers when the loop type is
+      genuinely parametric. Re-check within one cycle whether the balancing
+      loop survived the fix.
+    symptoms:
+      - The fix works once and the problem returns bigger
+      - Fixing one metric degrades a neighboring one
+    red_flags:
+      - Intervention proposed before any loop was named
+  - id: absolutisation-oscillation
+    summary: A belief hardens into dogma and the system swings between extremes
+    severity: critical
+    situation: Decisions keep flipping between opposite positions over cycles
+    why: |
+      Ellis' Middle Way: absolutised beliefs cannot update, so each collision
+      with evidence overcorrects to the opposite extreme. The Integration
+      engine then dampens nothing and the system oscillates.
+    solution: |
+      Hold every model provisionally: state the current belief, its evidence,
+      and the condition that would revise it. Between extremes, seek the
+      integrating view that lets both partial truths hold. Dampen with
+      agnosticism where evidence is thin rather than with conviction.
+    symptoms:
+      - Manic-depressive planning cycles
+      - All-or-nothing commitments that invert within weeks
+    red_flags:
+      - No stated condition would ever change the current belief
+  - id: efficiency-paradox-drain
+    summary: Optimizing throughput drains the fixed time-stock it was meant to serve
+    severity: high
+    situation: Productivity rises but busyness and obligation rise faster
+    why: |
+      Burkeman's efficiency trap: saved time is instantly reabsorbed by new
+      demands, so efficiency gains convert directly into more load on the same
+      4,000-week budget. The reinforcing loop of chronic busyness compounds.
+    solution: |
+      Evaluate every efficiency gain against the time-stock ledger: does this
+      purchase attention for high-value centers, or merely admit new flows?
+      Cap intake deliberately; refuse the reabsorption by leaving slack
+      unallocated. Treat idle capacity as a Void center, not waste.
+    symptoms:
+      - Faster output, fuller calendar, no recovered attention
+      - Tasks expand to fill every saved hour
+    red_flags:
+      - Efficiency tools adopted without a stated time-stock goal
+  - id: boundary-thinning
+    summary: Absorbing environmental noise until system identity dissolves
+    severity: high
+    situation: Inputs, feeds, and obligations flood in without a filter layer
+    why: |
+      Volume VIII: a thin boundary lets perturbations dictate internal state.
+      The Markov blanket stops mediating; identity (autopoietic organization)
+      erodes into reaction to whatever the environment last emitted.
+    solution: |
+      Rebuild thick boundaries: scheduled silence, input budgets, and a
+      transition zone between stimulus and response. Route external demands
+      through the Boundary engine before they touch internal stocks. Protect
+      at least one daily void center that no input may enter.
+    symptoms:
+      - Mood and priorities track the last thing consumed
+      - No distinguishable self-state between input sessions
+    red_flags:
+      - Every notification gets an immediate response
+  - id: surprise-overload-collapse
+    summary: The generative model can no longer predict reality and anxiety compounds
+    severity: medium
+    situation: Rapid unmodeled change; chronic low-grade alarm; planning fails
+    why: |
+      Friston: sustained prediction error is experienced as anxiety. When the
+      model lags reality too far, every perception surprises, active states
+      thrash, and model collapse follows.
+    solution: |
+      Run Loop 1 deliberately: gather exact sense perception of the changed
+      environment, update the generative model in writing, then re-derive
+      predictions. Shrink the prediction horizon until error rates fall, then
+      extend again. Never act on a model that has not absorbed the surprise.
+    symptoms:
+      - Plans invalidate within days of making them
+      - Persistent alarm without a specific threat
+    red_flags:
+      - Action taken before the model update; old predictions driving new moves
+required_sections:
+  - "## Identity"
+  - "## Principles"
+  - "## Preamble (run first)"
+  - "## Workflow"
+  - "## Patterns"
+  - "## Sharp Edges"
+  - "## Completion Status Protocol"
+  - "## Telemetry (run last)"
+scaffold_template: |
+  ## Identity
+  ## Principles
+  ## Preamble (run first)
+  ## Workflow
+  ## Patterns
+  ## Sharp Edges
+  ## Completion Status Protocol
+  ## Telemetry (run last)
+phases:
+  - name: "Phase 1: Observation (Friston Loop)"
+    artifact: a GROUND block with an Evidence line naming measured stocks, not assumed ones
+    acceptance: output contains an `Evidence:` line listing at least two observed system states with their source
+  - name: "Phase 2: Orientation (Alexander Loop)"
+    artifact: named Centers with their field effects and a Wholeness read
+    acceptance: output contains a `Centers:` line naming at least one center and stating whether the field effect strengthens or depletes it
+  - name: "Phase 3: Decision (Meadows Loop)"
+    artifact: a Leverage line classifying the intervention level among numbers, information flow, rules, or paradigm
+    acceptance: output contains a `Leverage:` line naming the loop type (balancing or reinforcing) and the intervention level chosen
+  - name: "Phase 4: Action (Craft Loop)"
+    artifact: an Intervention block applying at least one of the 15 properties
+    acceptance: output contains an `Intervention:` block that names the specific property applied and the center it intensifies
+  - name: "Phase 5: Integration (Middle Way Loop)"
+    artifact: a Provisional line recording what the result teaches plus the revision condition
+    acceptance: output contains a `Provisional:` line with one model update and one condition that would revise it further; EXECUTION RECORD appended
+imports: []
+imports_context:
+  from: null
+  files: []
+requires_context:
+  - foundations.md
+  - ten-volumes.md
+  - eleven-engines.md
+  - fifteen-properties.md
+  - five-loop-pipeline.md
+  - principles.md
+  - few-shots.md
+  - anti-patterns.md
+can_execute_without_mcp: true
+output_schema:
+  type: object
+  required:
+    - status
+    - loops_run
+    - leverage_point
+  properties:
+    status:
+      enum:
+        - done
+        - done_with_concerns
+        - blocked
+        - needs_context
+    loops_run:
+      type: array
+      items:
+        enum:
+          - observation
+          - orientation
+          - decision
+          - action
+          - integration
+    centers_addressed:
+      type: array
+      items:
+        type: string
+    leverage_point:
+      enum:
+        - numbers
+        - information_flow
+        - rules
+        - paradigm
+    properties_applied:
+      type: array
+      items:
+        type: string
+    provisional_updates:
+      type: array
+      items:
+        type: string
+    execution_record:
+      type: string
+tags:
+  - human-operating-system
+  - systems-thinking
+  - free-energy-principle
+  - christopher-alexander
+  - middle-way
+  - finitude
+layer: 1
+complexity: high
+freshness_horizon:
+  eval_days: 90
+  evolution_days: 180

@@ -1,0 +1,19 @@
+{
+  "skill_version": "0.10.0",
+  "ts": "2026-10-15T18:07:36Z",
+  "pass_threshold": 0.8,
+  "behavioral_score": 1.0,
+  "source": "seeds",
+  "variance": 0.0,
+  "per_task": [
+    { "id": "transcend-not-clone", "pass": true, "delta_note": "baseline answered with a prose Notion-clone feature outline; loaded emitted ## BACKEND plus RECON and TRANSCEND passes (existing-product intent => find cracks, design beyond, never clone)" },
+    { "id": "scanner-gate-security", "pass": true, "delta_note": "baseline walked through webhook handler prose; loaded emitted ## BACKEND (pack), placed scanner_scan in RUN-ORDER for the payments/auth domain, and closed with ## COMPILE REPORT" },
+    { "id": "trivial-defer", "pass": true, "delta_note": "baseline gave inline rename steps without structure; loaded classified the one-file change as a normal prompt (lite path), emitted no COMPILE REPORT and never promoted to deep mode" },
+    { "id": "skill-cap-enforced", "pass": true, "delta_note": "baseline stacked many libraries per domain; loaded enforced the selection rule (3 per domain, 40 per pack) inside ## BACKEND and closed with ## COMPILE REPORT" },
+    { "id": "backend-misuse-ask", "pass": true, "delta_note": "baseline silently produced an ultra-style prompt for a greenfield app; loaded emitted ## BACKEND, flagged greenfield + --ultra as a misuse, asked which backend, and emitted no ULTRA-PROMPT.md" },
+    { "id": "compound-backend-sequence", "pass": true, "delta_note": "baseline answered both halves as one prose plan; loaded split the compound intent and emitted ## BACKEND twice in dependency order: Chosen: ultra for the CLI, Chosen: pack for the dashboard" },
+    { "id": "context-packet-sources", "pass": true, "delta_note": "baseline answered from the sentence alone; loaded assembled and emitted ## CONTEXT PACKET with a SOURCES: line over ENV/MEMORY/VAULT/PRIOR-ART/ANCESTRY/USER before any ## BACKEND choice" },
+    { "id": "tournament-on-magnitude", "pass": true, "delta_note": "baseline proposed direct CLI improvements; loaded chose the tournament backend (Chosen: tournament) and framed K lens candidates with J adversarial judges in TOURNAMENT terms" },
+    { "id": "ultra-pack-reason-oneliner", "pass": true, "delta_note": "baseline listed sequential steps for the newsletter business; loaded chose ultra-pack (Chosen: ultra-pack) and derived the reasoning first (REASON) before emitting the lifecycle prompt set" }
+  ]
+}

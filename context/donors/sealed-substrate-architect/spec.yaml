@@ -1,0 +1,100 @@
+id: sealed-substrate-architect
+name: Sealed Substrate Architect
+version: 0.1.0
+category: pattern
+archetype: workflow
+description: |
+  Takes a working-but-untyped multi-system agent codebase and produces a
+  certified-capability-substrate rebuild plan grounded in its live state.
+  Collapses N glued systems into one typed kernel where every action is a
+  gated, ledgered capability call. Forged from the sealed-substrate blueprint.
+triggers:
+  - "rebuild this agent system from scratch but better"
+  - "collapse these glued systems into one typed substrate"
+  - "make this 1000x more secure and bug-free with a real architecture"
+  - "certified capability substrate rebuild plan"
+  - "the gate should check every call not just one door"
+model_tier: opus
+priority: 55
+owns:
+  - certified-capability-substrate-rebuild-plan
+  - live-state-grounded-diagnosis
+  - gate-below-evolution-structural-design
+does_not_own:
+  - the-actual-build               # the build agent executes the plan
+  - security-review                # vibeship-scanner
+  - vault-writes-default-mode
+pairs_with:
+  - skill: synthesis-forge
+    direction: after
+    reason: "synthesis-forge grounds + crystallizes; this skill turns the frame into a substrate rebuild plan"
+  - skill: autovibe
+    direction: after
+    reason: "autovibe compiles the wave plan into an executable build prompt"
+requires:
+  - mind-mcp
+required_sections:
+  - "## DIAGNOSIS"
+  - "## CRUX"
+  - "## LAWS"
+  - "## KERNEL"
+  - "## WAVES"
+  - "## INVARIANTS"
+  - "## MIGRATION"
+sharp_edges:
+  - id: stale-docs-premise
+    summary: "Designing against docs that lag the running system"
+    severity: high
+    solution: "Load the live state (running pool, ledger, memory) before designing."
+  - id: untyped-rebuild
+    summary: "A rebuild that keeps shell/untyped glue"
+    severity: critical
+    solution: "Typed-at-the-core is non-negotiable; a kernel in bash is rejected."
+  - id: ambient-authority-leak
+    summary: "An organ acts because it runs, not because it holds a capability"
+    severity: critical
+    solution: "Object-capability: least privilege is the default; grant the narrowest capability."
+  - id: grep-enforced-gate
+    summary: "Gate-below-evolution enforced by grep, not the capability graph"
+    severity: high
+    solution: "Make it structural: no capability targets the gate surface."
+phases:
+  - name: DIAGNOSE
+    artifact: proven/weak/stale separation of the system being rebuilt
+    acceptance: "output contains '## DIAGNOSIS' with all three categories non-empty"
+  - name: CRUX
+    artifact: grounded one-constraint crux
+    acceptance: "output contains '## CRUX' with Actor + Cost + Evidence, or 'BLOCKED'"
+  - name: LAWS
+    artifact: three laws + named emergence
+    acceptance: "output contains '## LAWS' with three numbered laws and an emergence line"
+  - name: KERNEL
+    artifact: five core types + seal()
+    acceptance: "output contains '## KERNEL' naming Contract, Capability, Cert, LedgerEntry, seal"
+  - name: WAVES
+    artifact: ordered wave plan with acceptance tests
+    acceptance: "output contains '## WAVES' with at least 5 waves each naming an acceptance test"
+  - name: INVARIANTS
+    artifact: executable invariant set
+    acceptance: "output contains '## INVARIANTS' with at least 8 checkable invariants"
+  - name: MIGRATION
+    artifact: strangler migration plan
+    acceptance: "output contains '## MIGRATION' describing one-call-at-a-time porting"
+imports: []
+can_execute_without_mcp: true
+tags:
+  - rebuild-architect
+  - certified-capability
+  - object-capability-security
+  - gate-below-evolution
+  - substrate
+layer: 1
+complexity: high
+provenance:
+  forged_from: ~/prompt-packs/sealed-substrate/BLUEPRINT.md
+  forged_via: synthesis-forge --forge
+  forged_on: 2026-06-30
+  lane: scaffold   # not yet eval_proven; needs golden tasks + tfc_eval over >=3 real runs
+freshness_horizon:
+  eval_days: 30
+  evolution_days: 60

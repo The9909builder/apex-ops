@@ -1,0 +1,68 @@
+name: catalog-freshness
+on:
+  schedule:
+    - cron: "11 18 * * 0"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ops-artifacts
+  cancel-in-progress: false
+jobs:
+  catalog-freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: audit committed donor catalog
+        run: |
+          python3 -c "import sys,textwrap;exec(textwrap.dedent(sys.stdin.read()))" <<'PY'
+          import json, datetime, os, collections
+          path = "context/knowledge/donor-catalog.json"
+          row = {"workflow": "catalog-freshness",
+                 "ts": datetime.datetime.now(datetime.timezone.utc)
+                       .strftime("%Y-%m-%dT%H:%M:%SZ")}
+          if not os.path.exists(path):
+              row.update({"status": "FAIL", "cause": "donor-catalog.json missing"})
+          else:
+              try:
+                  data = json.load(open(path))
+                  curated = [n for n in data.get("curated_donors", [])
+                             if isinstance(n, str)] if isinstance(data, dict) else []
+                  skill_names = [s.get("name") or s.get("id") or "?"
+                                 for s in data.get("skills", [])
+                                 if isinstance(s, dict)] if isinstance(data, dict) else []
+                  if not curated or not skill_names:
+                      row.update({"status": "WARN", "cause": "no entries parsed: structure drift"})
+                  else:
+                      dups = [n for n, c in collections.Counter(skill_names).items() if c > 1]
+                      dups += [n for n, c in collections.Counter(curated).items() if c > 1]
+                      junk = [n for n in set(curated + skill_names)
+                              if n.endswith(".bak") or n.endswith(".bak-pre-tfc")
+                              or "_template" in n]
+                      dangling = [c for c in curated if c not in set(skill_names)]
+                      row.update({"status": "WARN" if (dups or junk or dangling) else "PASS",
+                                  "skills": len(skill_names), "curated": len(curated),
+                                  "dups": sorted(set(dups)), "junk": sorted(set(junk)),
+                                  "dangling_curated": dangling})
+              except Exception as e:
+                  row.update({"status": "FAIL", "cause": type(e).__name__})
+          json.dump(row, open("/tmp/row.json", "w"))
+          print(json.dumps(row))
+          PY
+      - name: push row to ops-artifacts branch
+        run: |
+          set -e
+          git config user.name "apex-ops-bot"
+          git config user.email "apex-ops@users.noreply.github.com"
+          git fetch origin ops-artifacts || true
+          if git show-ref --verify --quiet refs/remotes/origin/ops-artifacts; then
+            git checkout -B ops-artifacts origin/ops-artifacts
+          else
+            git checkout --orphan ops-artifacts
+            git rm -rf --cached . >/dev/null 2>&1 || true
+          fi
+          mkdir -p ops-artifacts
+          cp /tmp/row.json ops-artifacts/catalog-freshness.json
+          git add ops-artifacts
+          git commit -m "catalog row $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git push origin ops-artifacts

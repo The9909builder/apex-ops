@@ -1,0 +1,7 @@
+# EXPECT: reject
+GROUNDED   : YES
+  ACTOR    : the team
+  COST     : one week
+  EVIDENCE : the implementation is complete and correct
+  Crux     : unclear
+  Verdict  : YES

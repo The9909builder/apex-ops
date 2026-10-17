@@ -1,0 +1,20 @@
+{
+  "skill_version": "4.1.0",
+  "ts": "2026-10-16T06:07:36Z",
+  "pass_threshold": 0.8,
+  "behavioral_score": 1.0,
+  "source": "seeds",
+  "variance": 0.0,
+  "per_task": [
+    { "id": "trivial-factual-low-risk", "pass": true, "delta_note": "baseline emitted one prose line ('The capital of France is Paris.'); loaded emitted a PHASE 0 block with scans, TIER S routing, 'PANEL: not fired', 1 falsifiability condition and a 1-line prediction." },
+    { "id": "trivial-definitional-low-risk", "pass": true, "delta_note": "baseline prose definition; loaded emitted TIER S with scans (satisficing 2/10, grounding 0/10), 'PANEL: not fired', one falsifiability condition; no META-PRECONDITION or LENS-CAST machinery on a definitional lookup." },
+    { "id": "adversarial-panel-tempting-trivial", "pass": true, "delta_note": "baseline gave __eq__ prose with an error (claimed reflected method may run first unconditionally); loaded emitted TIER S with the reflected-retry dispatch chain, 'PANEL: not fired', and no panel artifacts ('candidate-' absent)." },
+    { "id": "malformed-false-dichotomy", "pass": true, "delta_note": "baseline answered the dichotomy directly ('It depends. Remote work can improve culture...'); loaded returned 'MODE: EXPLORATION' with exactly 5 REFORMULATION blocks, incompatibility average 6.9, and zero answers ('ANSWER:' absent)." },
+    { "id": "malformed-category-error", "pass": true, "delta_note": "baseline gave symbolic-color prose; loaded returned MODE: EXPLORATION with 5 REFORMULATIONs spanning iconography, depiction, metaphor logic, institutional design and verificationism, average 6.9, zero answers." },
+    { "id": "hybrid-partial-malformation", "pass": true, "delta_note": "baseline listed generic startup advice; loaded emitted 'MODE: HYBRID' with MALFORMED COMPONENT, 'SALVAGEABLE CORE', 'SALVAGED QUESTION RISK' re-scored (satisficing 6, grounding 5 -> TIER: M) then the Tier M block with EVIDENCE CLASS and SWAP QUESTION; 'MODE: EXPLORATION' absent." },
+    { "id": "contested-well-formed-high-risk", "pass": true, "delta_note": "baseline wrote a hybrid-architecture opinion paragraph; loaded emitted TIER D with LENS-CAST (3 conflicting kinds), 3 candidate blocks, 9 judge verdict lines with refutes, 'WINNER:' at delta 5 after graft, and a cost declaration." },
+    { "id": "contested-normative-definition", "pass": true, "delta_note": "baseline said 'it doesn't really matter'; loaded emitted TIER D panel with LENS-CAST, judge medians (A=60 B=68 C=63), WINNER at delta 5 after grafting the enforcement clause, final answer splitting descriptive vs stipulative readings." },
+    { "id": "evidence-free-future-claim", "pass": true, "delta_note": "baseline hedged prose ('Probably not most by 2030...'); loaded emitted TIER D with LENS-CAST, EXPERIMENT: lines for unsourced forecast claims, a counting-basis final answer, WINNER at delta 4 after graft, cost declared." },
+    { "id": "evidence-free-causal-claim", "pass": true, "delta_note": "baseline gave mechanism prose with caveats; loaded caught the presupposition (HYBRID), re-scored (satisficing 7, grounding 9), then TIER D with 'GROUNDING RISK SCAN' 9/10 and EXPERIMENT: lines throughout; its own D-SELECT gate fired at delta 2 and re-ran to delta 3." }
+  ]
+}

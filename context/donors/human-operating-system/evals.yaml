@@ -1,0 +1,55 @@
+# evals.yaml — golden tasks for human-operating-system
+# Lanes are recomputed from disk: eval_proven requires behavioral_score >= pass_threshold
+# over these tasks from an eval-report.json whose skill_version matches spec.version.
+
+pass_threshold: 0.8
+
+golden_tasks:
+  - id: returning-problem-diagnosis
+    prompt: >
+      I capped my team's cloud spend and the bill came back even higher next
+      quarter, twice. Every fix we try makes it worse. Diagnose it.
+    must:
+      - "Evidence:"
+      - "Centers:"
+      - "Leverage:"
+      - "reinforcing"
+    must_not:
+      - "just set a stricter budget"
+      - "consider using more automation"
+
+  - id: efficiency-paradox-intervention
+    prompt: >
+      I automated my morning routine and notifications, and somehow I am busier
+      and more anxious than before. What is happening and what do I do?
+    must:
+      - "Evidence:"
+      - "Void"
+      - "Provisional:"
+    must_not:
+      - "try a better to-do app"
+      - "wake up earlier"
+
+  - id: oscillation-integration
+    prompt: >
+      I go from total strictness to total collapse in cycles, nothing in between.
+      Fix the oscillation.
+    must:
+      - "Leverage:"
+      - "paradigm"
+      - "revision condition"
+    must_not:
+      - "just be more consistent"
+      - "try harder"
+
+  - id: boundary-design
+    prompt: >
+      My mood and priorities completely track whatever I consumed last, and I
+      cannot tell anymore what I actually want. Rebuild my boundaries.
+    must:
+      - "Evidence:"
+      - "Intervention:"
+      - "thick"
+    must_not:
+      - "delete all social media"
+      - "just use willpower"

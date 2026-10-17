@@ -1,0 +1,61 @@
+name: weekly-fold-readiness
+on:
+  schedule:
+    - cron: "23 18 * * 0"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ops-artifacts
+  cancel-in-progress: false
+jobs:
+  fold-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: count unconsumed learnings
+        run: |
+          python3 -c "import sys,textwrap;exec(textwrap.dedent(sys.stdin.read()))" <<'PY'
+          import json, datetime, os
+          total = 0
+          unconsumed = 0
+          last_changelog = None
+          if os.path.exists("CHANGELOG.jsonl"):
+              rows = [json.loads(l) for l in open("CHANGELOG.jsonl") if l.strip()]
+              if rows:
+                  last_changelog = rows[-1].get("ts")
+          for line in open("learnings.jsonl"):
+              line = line.strip()
+              if not line:
+                  continue
+              total += 1
+              if last_changelog is None or (json.loads(line).get("ts") or "") > last_changelog:
+                  unconsumed += 1
+          row = {"workflow": "weekly-fold-readiness",
+                 "ts": datetime.datetime.now(datetime.timezone.utc)
+                       .strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "status": "PASS",
+                 "learnings_total": total,
+                 "unconsumed_est": unconsumed,
+                 "changelog_last": last_changelog,
+                 "note": "readiness only; the fold itself runs locally (agent + eval)"}
+          json.dump(row, open("/tmp/row.json", "w"))
+          print(json.dumps(row))
+          PY
+      - name: push row to ops-artifacts branch
+        run: |
+          set -e
+          git config user.name "apex-ops-bot"
+          git config user.email "apex-ops@users.noreply.github.com"
+          git fetch origin ops-artifacts || true
+          if git show-ref --verify --quiet refs/remotes/origin/ops-artifacts; then
+            git checkout -B ops-artifacts origin/ops-artifacts
+          else
+            git checkout --orphan ops-artifacts
+            git rm -rf --cached . >/dev/null 2>&1 || true
+          fi
+          mkdir -p ops-artifacts
+          cp /tmp/row.json ops-artifacts/weekly-fold-readiness.json
+          git add ops-artifacts
+          git commit -m "fold-readiness row $(date -u +%Y-%m-%dT%H:%M:%SZ)" || true
+          git push origin ops-artifacts

@@ -1,0 +1,36 @@
+{
+  "$id": "apex-system-card/v1",
+  "version": "1.0",
+  "title": "APEX System Card",
+  "description": "One schema shared by the vague-to-system emitter and the APEX Stage 0 DECODE consumer. Both text styles (apex 'KEY : value' scaffold, v2s '## SYSTEM CARD' block) parse into this canonical object.",
+  "styles": {
+    "apex": "response scaffold: 'KEY : value' lines; required keys INTENT/MODE/RISK/ROOT TYPE, optional DRYRUN plus the v2s context fields",
+    "v2s": "'## SYSTEM CARD' header then 'KEY: value' lines; its own forge rules cover ACTOR/GOAL/DOMAIN/OUTPUT/CONSTRAINTS/SUCCESS/EXTRACTION_METHOD, and this schema adds the required MODE/RISK/DRYRUN/ROOT TYPE governance lines"
+  },
+  "aliases": {
+    "GOAL": "intent",
+    "ROOT TYPE": "root_type",
+    "NODE TYPE": "root_type",
+    "EXTRACTION_METHOD": "extraction_method",
+    "EXTRACTION METHOD": "extraction_method"
+  },
+  "required": ["intent", "mode", "risk", "root_type"],
+  "fields": {
+    "intent": { "type": "string", "note": "apex INTENT / v2s GOAL: one action and one outcome; max 15 words" },
+    "actor": { "type": "string", "note": "named person or role, never 'users' or 'we'" },
+    "domain": { "type": "string", "enum": ["ai", "backend", "frontend", "devops", "data", "mobile", "design", "finance", "content", "unclear"] },
+    "output": { "type": "string", "note": "the concrete artifact or decision" },
+    "constraints": { "type": "string", "note": "binding limits or 'none stated'" },
+    "success": { "type": "string", "note": "observable signal: 'I will know it worked when ___'" },
+    "extraction_method": { "type": "string", "enum": ["clean", "interrogated", "rabbit-hole"] },
+    "mode": { "type": "string", "enum": ["EXPLORATION", "HYBRID", "EXECUTION"], "required": true },
+    "risk": { "type": "integer", "minimum": 0, "maximum": 10, "required": true },
+    "dryrun": { "type": "string", "enum": ["yes", "no"] },
+    "root_type": { "type": "string", "enum": ["LEARN", "DECIDE", "GENERATE", "RESEARCH", "BUILD", "SHIP", "LEVERAGE"], "required": true }
+  },
+  "consumers": {
+    "apex.decode": ["intent", "mode", "risk", "dryrun", "root_type"],
+    "vague-to-system.forge": ["actor", "intent", "domain", "output", "constraints", "success", "extraction_method"]
+  },
+  "mechanical_checker": "scripts/check-system-card.py"
+}

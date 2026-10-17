@@ -1,0 +1,248 @@
+id: frontier-vision
+name: Frontier Vision Engine
+version: 1.0.0
+category: pattern
+archetype: hybrid
+description: |
+  Radical vision engine that tears apart current paradigm assumptions, researches
+  real edges of science and technology across all domains, collides them, and generates
+  grounded "what if this existed" scenarios with 1000x impact vectors and concrete
+  first build steps. Use when the user wants to think beyond the current world,
+  question everything, or find where to build something no one has built yet.
+  Runs a 5-phase RESEARCH-GATED protocol: seed injection, frontier research,
+  vision collision, build test, frontier report capture.
+triggers:
+  - user wants to think beyond current technology limits
+  - user asks what if a wild technology existed
+  - user asks how something could be improved 1000x
+  - user wants to question assumptions across all domains
+  - user wants to find the next frontier to build on
+  - user asks what crazy thing could be built next
+  - user wants to vision across multiple domains at once
+  - user mentions frontier thinking or radical ideas
+  - user asks what the future of a domain could look like
+model_tier: opus
+priority: 60
+owns:
+  - frontier-seed-injection
+  - cross-domain-collision
+  - build-test-gating
+  - vision-capture-to-memory
+does_not_own:
+  - prd-writing
+  - security-scanning
+  - code-implementation
+  - note-vault-storage
+pairs_with:
+  - skill: autovibe
+    direction: after
+    reason: GROUNDED visions with W1 actions feed directly into autovibe for compilation into a build prompt
+  - skill: think-pipeline
+    direction: after
+    reason: UNGROUNDED visions that need 7-slot schema decomposition before they can be grounded
+  - skill: realthink
+    direction: parallel
+    reason: when a 1000x vector is unclear, realthink finds the real crux before frontier-vision continues
+  - skill: idearalph
+    direction: after
+    reason: GROUNDED vision TL;DR + 1000x vector feeds idearalph_prd for full product spec
+requires:
+  - spawner-mcp
+  - mind-mcp
+  - duckduckgo-search-mcp
+  - exa-mcp
+  - github-mcp
+  - playwright-mcp
+sharp_edges:
+  - id: domain-exhaustion
+    summary: "Domain wheel gets exhausted after ~15 runs; skill must meta-rotate to sub-fields"
+    severity: high
+    situation: When all 15 domains have appeared in recent learnings.jsonl entries
+    why: |
+      The 15-domain wheel is finite. After enough runs, the rotation dedup filter
+      causes the skill to revisit recently-used domains. At this point, the rotation
+      rule must upgrade: instead of top-level domains, rotate sub-fields or specific
+      unseen pairings within the wheel.
+    solution: |
+      Check learnings.jsonl entries. If all 15 domains appear in last 15 runs,
+      switch to sub-field rotation: pick a sub-field within each domain (e.g.,
+      genomics -> base-editing vs. mRNA therapeutics vs. synthetic biosensors).
+    symptoms:
+      - All seeds feel familiar or have been researched before
+      - Phase 2 research returns papers already seen in prior runs
+    red_flags:
+      - All three selected domains appeared in the last 10 learnings.jsonl entries
+  - id: research-timeout
+    summary: "Web searches can stall; never let a single stuck seed block the whole run"
+    severity: critical
+    situation: When a web search or paper search returns nothing useful after 3 attempts
+    why: |
+      External search APIs can return empty, rate-limit, or return irrelevant results.
+      Waiting indefinitely on a single stuck seed kills the entire run. The skill
+      is designed to produce value from 2 of 3 seeds if one is blocked.
+    solution: |
+      After 3 failed search attempts on a seed, mark it RESEARCH_BLOCKED with the
+      failed queries listed. Continue with the remaining seeds. Log the blocked seed
+      to learnings.jsonl so it is not selected again immediately.
+    symptoms:
+      - Phase 2 taking more than 10 minutes on a single seed
+      - Searches returning generic results with no specific edge numbers
+    red_flags:
+      - Seed question is too vague to generate specific search terms
+      - Domain is too broad (e.g., "AI" instead of "sparse mixture-of-experts inference")
+  - id: build-test-creep
+    summary: "W1 actions drift toward more-research instead of actual build steps"
+    severity: high
+    situation: When writing W1 actions for GROUNDED visions in Phase 4
+    why: |
+      The reflex when facing an unfamiliar vision is to say "research more." But
+      research is Phase 2's job. Phase 4's job is to find a build step that exists
+      TODAY using tools on this machine. "Research X" as a W1 means BUILD TEST failed.
+    solution: |
+      Require W1 to name a specific tool, repo, API, or build target. Examples:
+      "Clone [repo] and run inference on [dataset]" or "Wire [API A] to [API B]
+      using spawner" or "Build a prototype that does X using Y." If you cannot name
+      the tool, the vision is UNGROUNDED.
+    symptoms:
+      - W1 action says "research" or "read" or "learn about"
+      - W1 action has no tool, repo, or API named
+    red_flags:
+      - Vision has no existing open-source implementation anywhere near the edge
+  - id: mind-api-down
+    summary: "Phase 5 mind_remember fails if Mind API is not running on port 8000"
+    severity: high
+    situation: When running Phase 5 capture and mind_remember returns an error
+    why: |
+      Mind API must be started manually each session. It does not auto-start.
+      If port 8000 is down, mind_remember fails silently or errors. The frontier
+      report file should still be written -- do not block on mind availability.
+    solution: |
+      Check: curl -sf http://127.0.0.1:8000/health
+      Start if down: python3 -c "from mind.api.app import app; import uvicorn; uvicorn.run(app, host='127.0.0.1', port=8000)" &
+      Write the frontier report regardless. Log mind_remember failure to learnings.jsonl.
+    symptoms:
+      - mind_remember returns connection error or timeout
+      - mind_health returns unhealthy
+    red_flags:
+      - Port 8000 not in netstat output
+skill_chain:
+  - skill: think-pipeline
+    min_level: L2
+  - skill: realthink
+    min_level: L3
+required_sections:
+  - "## SEED FRAME"
+  - "## FRONTIER RESEARCH"
+  - "## VISION COLLISION"
+  - "## BUILD TEST"
+  - "## FRONTIER REPORT"
+scaffold_template: |
+  ## SEED FRAME
+
+  DOMAIN_1:
+  SEED_1: What if [...] existed?
+
+  DOMAIN_2:
+  SEED_2: What if [...] existed?
+
+  DOMAIN_3:
+  SEED_3: What if [...] existed?
+
+  ## FRONTIER RESEARCH
+
+  ### Seed 1:
+  CURRENT_STATE:
+  BEST_PAPER:
+  ACTIVE_CODE:
+  EDGE:
+
+  ### Seed 2:
+  CURRENT_STATE:
+  BEST_PAPER:
+  ACTIVE_CODE:
+  EDGE:
+
+  ### Seed 3:
+  CURRENT_STATE:
+  BEST_PAPER:
+  ACTIVE_CODE:
+  EDGE:
+
+  ## VISION COLLISION
+
+  ### Vision A:
+  COLLISION:
+  SCENARIO:
+  1000X_VECTOR:
+  TRANSFORMS_FIRST:
+  FEASIBILITY:
+
+  ### Vision B:
+  [same structure]
+
+  ### Vision C:
+  [same structure]
+
+  ## BUILD TEST
+
+  ### Vision A: [GROUNDED | UNGROUNDED]
+  W1:
+  W4:
+  W12:
+  TOOLS:
+
+  ## FRONTIER REPORT
+
+  BEST_VISION:
+  TL;DR:
+  HIGHEST_LEVERAGE_W1:
+  DOMAINS_COVERED:
+  REPORT_FILE:
+phases:
+  - name: "Phase 1: SEED INJECTION"
+    artifact: "SEED FRAME block with 3 domain names and 3 seed questions"
+    acceptance: "output contains '## SEED FRAME' with 3 SEED_ fields each containing 'What if'"
+  - name: "Phase 2: FRONTIER RESEARCH"
+    artifact: "FRONTIER RESEARCH block with CURRENT_STATE, BEST_PAPER, ACTIVE_CODE, EDGE per seed"
+    acceptance: "output contains '## FRONTIER RESEARCH' with 3 EDGE fields; each EDGE field contains a number or named constraint in quotes"
+  - name: "Phase 3: VISION COLLISION"
+    artifact: "VISION COLLISION block with 3 scenarios each naming collision, 1000x vector, and feasibility call"
+    acceptance: "output contains '## VISION COLLISION' with 3 COLLISION fields, 3 1000X_VECTOR fields, 3 FEASIBILITY fields set to 'NOW' or '5YR' or 'UNKNOWN'"
+  - name: "Phase 4: BUILD TEST"
+    artifact: "BUILD TEST block with GROUNDED or UNGROUNDED per vision; W1/W4/W12 for each grounded one"
+    acceptance: "output contains '## BUILD TEST' with each vision labeled 'GROUNDED' or 'UNGROUNDED'; every 'GROUNDED' entry has a non-empty W1 field"
+  - name: "Phase 5: FRONTIER REPORT"
+    artifact: "FRONTIER REPORT block, frontier report file written, mind_remember called"
+    acceptance: "FRONTIER REPORT block exists; report file path is stated; mind_remember call result is recorded"
+imports: []
+can_execute_without_mcp: false
+tags:
+  - frontier-thinking
+  - cross-domain
+  - vision
+  - 1000x
+  - research-gated
+  - what-if
+  - radical-ideas
+  - domain-collision
+layer: 2
+complexity: high
+freshness_horizon:
+  eval_days: 14
+  evolution_days: 30
+output_schema:
+  seed_frame:
+    domains: "array of 3 domain names"
+    seeds: "array of 3 What-if questions"
+  frontier_research:
+    per_seed: "CURRENT_STATE + BEST_PAPER + ACTIVE_CODE + EDGE"
+  vision_collision:
+    visions: "array of 3 objects with collision + 1000x_vector + feasibility"
+  build_test:
+    grounded_count: "integer 0-3"
+    ungrounded_count: "integer 0-3"
+    w1_actions: "array of grounded vision W1 actions"
+  frontier_report:
+    best_vision: "name of highest-leverage vision"
+    w1_action: "specific first build step"
+    report_file: "path to written report"

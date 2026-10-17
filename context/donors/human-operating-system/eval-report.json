@@ -1,0 +1,30 @@
+{
+  "skill_version": "1.0.0",
+  "ts": "2026-09-20T00:00:00Z",
+  "pass_threshold": 0.8,
+  "behavioral_score": 1.0,
+  "source": "seeds",
+  "variance": 0.0,
+  "per_task": [
+    {
+      "id": "returning-problem-diagnosis",
+      "pass": true,
+      "delta_note": "baseline recommended a stricter budget cap and cost-monitoring tooling, the exact pesticide move; skill-loaded run emitted Evidence: naming two observed states (workload-splitting across 3 accounts, 2x bill after each cap) with sources, Centers: identifying the deployment flow as depleting, and Leverage: classifying a reinforcing loop at information-flow level, refusing the numbers fix"
+    },
+    {
+      "id": "efficiency-paradox-intervention",
+      "pass": true,
+      "delta_note": "baseline suggested a better to-do app and waking earlier; skill-loaded run emitted Evidence: from calendar and notification logs, named the lost Void center, prescribed a 7-day unallocated rule as Intervention: with property 13 applied, and emitted Provisional: with a revision condition routing to Volume VII if slack decays"
+    },
+    {
+      "id": "oscillation-integration",
+      "pass": true,
+      "delta_note": "baseline advised consistency and willpower; skill-loaded run emitted Leverage: naming oscillation as an Integration-engine failure at paradigm level, prescribed the provisionality ledger with belief/evidence/revision condition, and emitted a Provisional: line whose revision condition routes physiological drivers to a professional"
+    },
+    {
+      "id": "boundary-design",
+      "pass": true,
+      "delta_note": "baseline said delete all social media and use willpower; skill-loaded run emitted Evidence: (mood tracking last input, no self-state between sessions), Intervention: as the Thick Boundary Kit with input budgets, scheduled silence, and a 24-hour delay rule, explicitly building thick transition zones rather than an absolutised purge"
+    }
+  ]
+}

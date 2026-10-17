@@ -1,0 +1,396 @@
+id: genesis
+name: GENESIS Synthesis Protocol
+version: 2.0.0
+lane: authored
+category: pattern
+archetype: hybrid
+description: |
+  Synthesis intelligence protocol for builders who need to explode a vague problem
+  into raw creative material, filter signal from noise, apply ULTRATHINK evaluation
+  on top candidates, and compress to an emergent solution before committing to
+  execution. Fires when a problem has too many directions or when a plan needs a
+  synthesis gate before the first wave starts.
+triggers:
+  - "synthesize multiple frameworks or sources into one approach"
+  - "stuck on complex problem with too many possible directions"
+  - "create a framework from first principles for a new domain"
+  - "deep analysis needed before committing to implementation plan"
+  - "need to explore 20 or more ideas before choosing direction"
+  - "apply ULTRATHINK gate to a plan before execution starts"
+  - "generate breakthrough ideas for a hard product or architecture decision"
+  - "evaluate synthesis output for emergence not just addition"
+model_tier: sonnet
+priority: 60
+owns:
+  - synthesis-diverge-converge
+  - ultrathink-evaluation
+  - emergence-testing
+  - evolution-loop
+does_not_own:
+  - problem-identification
+  - prd-generation
+  - execution-waves
+pairs_with:
+  - skill: realthink
+    direction: before
+  - skill: think-pipeline
+    direction: parallel
+  - skill: vague-to-system
+    direction: after
+requires:
+  - mind-mcp
+  - spawner-mcp
+sharp_edges:
+  - id: stale-mind-uuid
+    summary: "Old UUID 477b8a03 causes silent mind_remember failures — no error, no write"
+    severity: critical
+    situation: When mind_remember or mind_retrieve is called with UUID 477b8a03-d6f3-54e0-902f-c543549dccc5
+    why: |
+      The canonical Mind UUID changed. The old UUID fails validation silently.
+      No error is returned — the call appears to succeed but nothing is written.
+      Past genesis session evolution logs are invisible when retrieved later.
+    solution: |
+      Always use 550e8400-e29b-41d4-a716-446655440000 for all mind_* calls.
+      Run: grep -n "477b8a03" ~/.future-code/skills/pattern/genesis/SKILL.md
+      before any session to confirm the UUID is correct.
+    symptoms:
+      - mind_retrieve returns no results from past genesis synthesis sessions
+      - EVOLVE step writes succeed silently but are never retrieved next session
+    red_flags:
+      - '"477b8a03" appearing in any mind_remember or mind_retrieve call'
+  - id: premature-convergence
+    summary: "Selecting candidates before 15+ ideas generated picks from obvious-space only"
+    severity: high
+    situation: When user or builder wants to skip to evaluation after 5-7 ideas
+    why: |
+      The first 10 ideas exhaust the obvious solution space. Non-obvious insights
+      consistently appear in ideas 11-20. Selecting early means selecting from the
+      lowest-value pool — you get the best bad idea, not the best idea.
+    solution: |
+      Enforce 20+ ideas including 3+ uncomfortable ones before any evaluation step.
+      If the user pushes to converge early, name this anti-pattern aloud.
+    symptoms:
+      - Top-3 candidates all feel like variations of the same approach
+      - Synthesis output resembles the first idea generated
+    red_flags:
+      - 'best idea named in the first response block before 15 ideas exist'
+  - id: summarizing-not-synthesizing
+    summary: "Output organized by source is summarization — synthesis creates new capability"
+    severity: high
+    situation: When SYNTHESIZE step output is organized by source material
+    why: |
+      Summarization preserves existing knowledge. Synthesis creates new knowledge.
+      The test is whether Z (the synthesis) can do something neither A nor B can do alone.
+      Output organized by source means SYNTHESIZE was skipped or misunderstood.
+    solution: |
+      Apply the emergence test: name Z explicitly.
+      If you cannot name a new capability that A+B creates but neither alone has, restart SYNTHESIZE.
+    symptoms:
+      - Output has sections labeled by input source
+      - No Emergence insight named anywhere in the output
+    red_flags:
+      - 'Section headers labeled by input source (From realthink output, From research phase)'
+skill_chain:
+  - skill: realthink
+    min_level: L3
+required_sections:
+  - "## SYNTHESIS RESULTS"
+  - "### Core Insights"
+  - "### Concrete Build"
+scaffold_template: |
+  ## SYNTHESIS RESULTS
+
+  ### Core Insights
+  - **Shared DNA:** [pattern connecting the sources]
+  - **Gaps Filled:** [what each source adds that others lack]
+  - **Emergence:** [new capability that exists only in combination]
+
+  ### Concrete Build
+  | Attribute | Detail |
+  |-----------|--------|
+  | **Name** | |
+  | **Type** | Tool / Protocol / System / Framework |
+  | **Description** | |
+  | **First Action** | |
+
+  ### Next Actions
+  1.
+  2.
+  3.
+can_execute_without_mcp: true
+tags:
+  - synthesis
+  - ultrathink
+  - creativity
+  - framework-generation
+  - diverge-converge
+layer: 1
+complexity: high
+
+# v3 W3: perishability horizon — how long a proof stays "fresh" before decay drops the
+# effective lane one rung. Absent ⇒ no decay pressure. core/decay.ts reads it as-of a date.
+freshness_horizon:
+  eval_days: 30
+  evolution_days: 60
+
+# ============================================================
+# TFC v2 DECISION-STRUCTURE LAYERS (7–22)
+# ============================================================
+
+# Layer 7+8: Capability Inventory + Selector Logic
+capabilities:
+  - name: synthesis-diverge-converge
+    description: "Explode the problem into 20+ ideas using Absurd Amplification, Role Shifting, Cross-Domain Stealing, and Constraint Explosion. Filter with Goldilocks to 5–8 structured candidates."
+    preset: "FULL"
+    triggers:
+      keywords: ["explode", "diverge", "ideas", "brainstorm", "directions", "options"]
+      mode: any
+  - name: ultrathink-evaluation
+    description: "Apply the 10-letter ULTRATHINK gate (U through K) to top-3 candidates. Each of U, T, N must be answered in one specific sentence before proceeding."
+    preset: "EXPRESS"
+    triggers:
+      keywords: ["evaluate", "stress-test", "gate", "ultrathink", "validate", "depth"]
+      mode: any
+  - name: emergence-testing
+    description: "Verify that A+B produces Z where Z exceeds X+Y. Name Z explicitly. Check from 3 stakeholder positions. Output organized by source = fail."
+    preset: "REVIEW"
+    triggers:
+      keywords: ["synthesize", "combine", "merge", "emergence", "synthesis", "integrate"]
+      mode: any
+  - name: evolution-loop
+    description: "Capture what worked and what failed. Extract one reusable pattern. Write one hypothesis. Call mind_remember with salience >= 0.75. Never skip."
+    preset: "EVOLVE-ONLY"
+    triggers:
+      keywords: ["evolve", "capture", "close", "session", "log", "learn"]
+      mode: any
+
+# Layer 9 + 19: Mode Declaration + Tool Availability Check
+mode_check:
+  required_tools: ["mind_remember", "mind_retrieve", "spawner_emit"]
+  fallback: prompt
+  detection_order: ["mind_retrieve", "spawner_emit", "idearalph_brainstorm"]
+
+# Layer 10: Input Parser
+inputs:
+  - name: problem_domain
+    type: string
+    constraint: "must be extractable from input; ask user if absent"
+    description: "The domain or subject the synthesis targets"
+  - name: existing_directions
+    type: list
+    constraint: "count + list; default 0 if none provided"
+    description: "Directions or approaches already considered by the user"
+  - name: hard_constraints
+    type: list
+    constraint: "limits named explicitly; default none"
+    description: "Non-negotiable bounds on the synthesis space"
+  - name: success_signal
+    type: string
+    constraint: "must be specific; ask user if absent"
+    description: "What done looks like — the observable outcome"
+  - name: time_horizon
+    type: enum
+    constraint: "short | medium | long; default medium"
+    description: "How far out the synthesis should be viable"
+
+# Phase artifact declarations (drives Layer 15: State Tracker)
+phases:
+  - name: EXPLODE
+    artifact: "20+ raw ideas list with 3+ labeled uncomfortable or absurd"
+    acceptance: "SKILL.md output contains a numbered list with count >= 20 and at least 3 items tagged uncomfortable"
+  - name: STRUCTURE
+    artifact: "5–8 structured candidates each with name, problem_solved, description, first_action"
+    acceptance: "output contains 5+ candidate blocks each with a first_action naming a file, tool, or command"
+  - name: DEEPEN
+    artifact: "U, T, N answers for top-3 candidates — one specific sentence each"
+    acceptance: "output contains U:, T:, N: answers that are not restatements of the stated problem"
+  - name: SYNTHESIZE
+    artifact: "Z sentence: 'A+B enables Z which neither alone can do because [reason]'"
+    acceptance: "output contains the Z sentence with a non-empty 'because' clause"
+  - name: EVOLVE
+    artifact: "evolution log: worked=[X] | failed=[Y] | pattern=[Z] | next=[hypothesis]"
+    acceptance: "mind_remember called OR learnings.jsonl entry written with all four fields"
+
+# Layer 12: Dependency Graph
+phase_dependencies:
+  - phase: STRUCTURE
+    depends_on: [EXPLODE]
+    required_artifacts: ["20+ raw ideas list"]
+  - phase: DEEPEN
+    depends_on: [STRUCTURE]
+    required_artifacts: ["5+ structured candidates with first_action"]
+  - phase: SYNTHESIZE
+    depends_on: [DEEPEN]
+    required_artifacts: ["U+T+N answers for top candidate"]
+  - phase: EVOLVE
+    depends_on: [SYNTHESIZE]
+    required_artifacts: ["Z sentence with non-empty because clause"]
+
+# Layer 13: Evidence Gates
+evidence_gates:
+  - phase: EXPLODE
+    artifact: "20+ ideas list"
+    check: "count >= 20 AND 3+ labeled uncomfortable or absurd"
+    block_if: "count < 15 OR no uncomfortable ideas"
+  - phase: STRUCTURE
+    artifact: "5–8 structured candidates"
+    check: "5+ candidates AND each first_action names a file, tool, or command"
+    block_if: "fewer than 5 candidates OR any first_action is vague"
+  - phase: DEEPEN
+    artifact: "U+T+N answers"
+    check: "U names a hidden problem distinct from stated; T names a new capability; N is one concrete action"
+    block_if: "U = restatement of stated problem OR T = 'improvement' without named capability OR N is multi-step"
+  - phase: SYNTHESIZE
+    artifact: "Z sentence"
+    check: "A+B enables Z sentence is complete with non-empty because clause"
+    block_if: "Z sentence has empty blank OR output is organized by source not by capability"
+  - phase: EVOLVE
+    artifact: "evolution log"
+    check: "worked + failed + pattern + hypothesis all captured; mind_remember called OR learnings.jsonl written"
+    block_if: "session ends without evolution capture"
+
+# Layer 14: Recovery Protocol
+recovery_protocol:
+  - phase: EXPLODE
+    on_failure:
+      step_1: "Apply Cross-Domain Stealing: name the core pattern, find an unrelated field that solved it, steal the mechanism"
+      step_2: "Apply Absurd Amplification: take the main constraint to 100x; extract the 1% genius from the absurd case"
+      step_3: "Apply Role Shifting: run Child, Criminal, Competitor — extract one divergent insight from each"
+      step_4: "BLOCKED: emit 'BLOCKED: cannot reach 15+ non-redundant ideas — escalate to realthink'"
+      max_retries: 3
+  - phase: STRUCTURE
+    on_failure:
+      step_1: "For each candidate with a vague first_action, name the specific file, command, or tool"
+      step_2: "Reject candidates where first_action is 'research', 'think', or 'explore' — replace or drop"
+      max_retries: 2
+  - phase: DEEPEN
+    on_failure:
+      step_1: "For vague U: ask 'what breaks in the system if we solve the stated problem but this one remains?'"
+      step_2: "For vague T: ask 'what can users do after this ships that they literally cannot do today?'"
+      step_3: "For vague N: ask 'what is one named file, tool, or command that is the first action?'"
+      step_4: "ESCALATE to realthink with all 20+ ideas and partial ULTRATHINK answers"
+      max_retries: 2
+  - phase: SYNTHESIZE
+    on_failure:
+      step_1: "Restart SYNTHESIZE: ask 'what task is impossible with only A, impossible with only B, but possible with both?'"
+      step_2: "If output organized by source: reorganize by new capability, not input origin"
+      max_retries: 2
+  - phase: EVOLVE
+    on_failure:
+      step_1: "Mind API down: write to learnings.jsonl with pending_mind_sync=true"
+      step_2: "Time pressure: write minimum evolution log (worked + failed only) to learnings.jsonl"
+      max_retries: 1
+
+# Layer 16: Quality Rubric
+quality_rubric:
+  - phase: EXPLODE
+    checks:
+      - criterion: "Divergence count"
+        observable: "Count of numbered ideas in output"
+        severity: fail
+      - criterion: "Uncomfortable ideas present"
+        observable: "At least 3 ideas labeled uncomfortable, absurd, or criminal"
+        severity: warn
+      - criterion: "Multiple divergence techniques used"
+        observable: "Output references at least 2 named techniques (Role Shifting, Cross-Domain, Absurd, Constraint)"
+        severity: warn
+  - phase: DEEPEN
+    checks:
+      - criterion: "U answer is not a restatement"
+        observable: "U answer names a problem not in the original user input"
+        severity: fail
+      - criterion: "T answer names a capability"
+        observable: "T answer contains a named capability, not 'improvement' or 'better'"
+        severity: fail
+      - criterion: "N answer is concrete"
+        observable: "N answer names a file, tool, command, or deliverable"
+        severity: fail
+  - phase: SYNTHESIZE
+    checks:
+      - criterion: "Z sentence complete"
+        observable: "Output contains 'enables' and 'because' with non-empty clauses"
+        severity: fail
+      - criterion: "Output organized by capability not source"
+        observable: "No section headers labeled by input origin (From X, From Y)"
+        severity: fail
+      - criterion: "Stakeholder check ran"
+        observable: "Output references 3 stakeholder positions"
+        severity: warn
+  - phase: EVOLVE
+    checks:
+      - criterion: "All four evolution fields captured"
+        observable: "Output contains worked=, failed=, pattern=, next= all non-empty"
+        severity: fail
+      - criterion: "mind_remember called or learnings.jsonl written"
+        observable: "Session log shows mind_remember call or grep learnings.jsonl returns new entry"
+        severity: fail
+
+# Layer 17: Escalation Rules
+escalation_rules:
+  inference_threshold: 0.7
+  escalation_order: ["infer", "downgrade", "ask", "abort"]
+  max_escalations: 2
+
+# Layer 18: Context File Router
+context_routing:
+  - file: "learnings.jsonl"
+    load_when:
+      keywords: ["session", "start", "genesis", "synthesis", "past"]
+      phases: ["EXPLODE"]
+      mode: any
+  - file: "../../../mcp/tfc-builder/runtime/preamble.sh"
+    load_when:
+      keywords: ["preamble", "runtime", "telemetry"]
+      phases: ["EXPLODE"]
+      mode: tool
+  - file: "spec.yaml"
+    load_when:
+      keywords: ["uuid", "version", "477b8a03", "stale"]
+      phases: ["EXPLODE"]
+      mode: any
+
+# Layer 20: Cross-Skill Invocation Protocol
+cross_skill_invocations:
+  - skill: realthink
+    trigger:
+      keywords: ["real problem", "unclear problem", "reframe", "still unclear"]
+      phase: DEEPEN
+    handoff_contract: "Pass: idea_list (20+ ideas), top_candidates (top 3 with partial ULTRATHINK), stated_problem"
+    return_contract: "Receive: one_lever (real problem identified). Resume at DEEPEN with lever as U answer."
+  - skill: think-pipeline
+    trigger:
+      keywords: ["plan", "7-slot", "execute", "next steps", "roadmap"]
+      phase: SYNTHESIZE
+    handoff_contract: "Pass: emergence_Z (named new capability), first_action, problem context"
+    return_contract: "Receive: filled 7-slot schema. Do not re-run GENESIS."
+  - skill: vague-to-system
+    trigger:
+      keywords: ["formalize", "framework", "system", "structure", "define"]
+      phase: null
+    handoff_contract: "Pass: synthesis result, framework name, extracted principles, evolution log"
+    return_contract: "Receive: formalized system. Do not re-run GENESIS."
+
+# Layer 21: Memory Protocol
+memory_protocol:
+  store_on:
+    - "Phase 5 EVOLVE completion"
+    - "Phase 4 SYNTHESIZE when Z is named with high confidence"
+  retrieve_at:
+    - "Session start before Phase 1 EXPLODE"
+  store_tool: mind_remember
+  retrieve_tool: mind_retrieve
+  store_salience: 0.75
+
+# Layer 22: Self-Improvement Hook
+self_improvement:
+  learning_triggers:
+    - "technique produced breakthrough insight"
+    - "technique felt forced or produced noise"
+    - "emergence test failed at SYNTHESIZE"
+    - "premature convergence caught and corrected"
+    - "stale UUID attempted"
+  eval_focus:
+    - "divergence technique effectiveness per domain"
+    - "ULTRATHINK gate pass rate on first attempt"
+    - "emergence Z quality vs stakeholder position count"
+    - "EVOLVE capture rate (skipped vs completed)"

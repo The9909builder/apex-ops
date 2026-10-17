@@ -1,0 +1,3 @@
+# EXPECT: accept
+BUDGET     : leaves<=6 tokens<=90000 overrun: halt
+RESUME     : node mid-BUILD "wire adapter" -> /home/roshish/.apex/journal/.blackboard-demo.json

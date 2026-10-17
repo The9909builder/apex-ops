@@ -1,0 +1,39 @@
+{
+  "$id": "apex-front-door/v1",
+  "version": "1.0",
+  "description": "Which door a raw user intent enters through. Score = number of a door's patterns that appear in the intent (case-insensitive); highest score wins; ties resolve by precedence_order; no match falls back. Mechanical checker: scripts/check-front-door.py",
+  "doors": [
+    {
+      "id": "apex",
+      "role": "multi-leaf routing",
+      "scope": "goals that decompose into several typed leaves (learn/decide/build) across donors",
+      "patterns": ["decompose", "break (this|it|my [a-z ]+) down", "multi[- ]?(leaf|domain)", "orchestrate", "learn.*decide.*build", "route .*(donor|leaf)"]
+    },
+    {
+      "id": "ultraflow",
+      "role": "blab to skill",
+      "scope": "a messy intent that should become a reusable, self-improving skill",
+      "patterns": ["into a (reusable |living |new )?skill", "turn .* into a skill", "\\bblab\\b", "self.improving skill", "forge a skill", "make (this|it) a skill"]
+    },
+    {
+      "id": "omni-forge",
+      "role": "arc",
+      "scope": "full-arc intents spanning research, idea, decision, plan, build, meta",
+      "patterns": ["end.to.end", "idea to (ship|shipped|product|app|launch)", "full arc", "whole arc", "\\barc\\b", "\\blifecycle\\b"]
+    },
+    {
+      "id": "kraken-flow",
+      "role": "spine",
+      "scope": "a decide plus design plus build spine from messy speech to executed output",
+      "patterns": ["figure out.*build", "then build", "\\bspine\\b", "decide .* then build"]
+    },
+    {
+      "id": "vague-to-system",
+      "role": "card",
+      "scope": "forge one System Card and route it onward",
+      "patterns": ["system card", "one.page", "make me a card", "give me a card", "classify this"]
+    }
+  ],
+  "precedence_order": ["apex", "ultraflow", "omni-forge", "kraken-flow", "vague-to-system"],
+  "fallback": "vague-to-system"
+}

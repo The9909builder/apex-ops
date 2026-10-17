@@ -1,0 +1,3 @@
+# EXPECT: accept
+BUDGET     : leaves<=4 tokens<=60000 overrun: terse
+BLACKBOARD: /home/roshish/.apex/journal/.blackboard-demo.json

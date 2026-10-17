@@ -1,0 +1,12 @@
+# EXPECT: accept
+INTENT     : ship the W1 gate battery green on this machine
+MODE       : EXECUTION
+RISK       : 4
+DRYRUN     : no
+ROOT TYPE  : BUILD
+ACTOR      : roshish
+DOMAIN     : devops
+OUTPUT     : a green W1 gate battery
+CONSTRAINTS: this machine, one session
+SUCCESS    : the W1 acceptance command exits 0
+EXTRACTION METHOD: clean

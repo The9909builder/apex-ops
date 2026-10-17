@@ -1,0 +1,2 @@
+# EXPECT: reject
+BUDGET     : leaves<=4 tokens<=60000 overrun: halt

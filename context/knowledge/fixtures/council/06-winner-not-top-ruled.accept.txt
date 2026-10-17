@@ -1,0 +1,6 @@
+# EXPECT: accept
+COUNCIL: D6 (2 candidates)
+- C1 [speed-first] score 9: fastest to ship
+- C2 [cost-first] score 7: slower but passes the cost gate
+WINNER: C2
+RULED: C1 violates the leaf's cost acceptance (needs a paid tier); C2 passes every gate

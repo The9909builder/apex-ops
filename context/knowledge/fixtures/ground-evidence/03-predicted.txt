@@ -1,0 +1,7 @@
+# EXPECT: reject
+GROUNDED   : YES
+  ACTOR    : the on-call engineer
+  COST     : roughly two hours
+  EVIDENCE : predicted low cost once deployed; expected to pass review
+  Crux     : unclear
+  Verdict  : YES

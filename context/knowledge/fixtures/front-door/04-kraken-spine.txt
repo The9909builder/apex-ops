@@ -1,0 +1,2 @@
+# EXPECT: kraken-flow
+# INTENT: figure out how to price my course and then build the pricing page

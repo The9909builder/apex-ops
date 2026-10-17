@@ -1,0 +1,7 @@
+# EXPECT: reject
+GROUNDED   : YES
+  ACTOR    : we
+  COST     : unknown
+  EVIDENCE : we checked everything and it looks fine
+  Crux     : unknown
+  Verdict  : YES

@@ -1,0 +1,2 @@
+# EXPECT: vague-to-system
+# INTENT: make me a one-page system card for my idea about a bakery

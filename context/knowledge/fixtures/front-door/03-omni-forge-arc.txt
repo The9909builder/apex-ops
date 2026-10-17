@@ -1,0 +1,2 @@
+# EXPECT: omni-forge
+# INTENT: take me from idea to shipped product end to end for a habit app

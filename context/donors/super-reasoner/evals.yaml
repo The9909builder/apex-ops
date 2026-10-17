@@ -1,0 +1,101 @@
+# PROVE lane (INV-4): the contract grows an evals.yaml alongside spec.yaml + SKILL.md.
+# A skill reaches the `eval_proven` lane only when an eval-report.json scores
+# behavioral_score >= pass_threshold over these golden tasks AND the report's
+# skill_version matches spec.version. Lanes are recomputed from disk, never asserted.
+#
+# v4.0 held-out set: 10 tasks across the three axes, plus one adversarial case designed to
+# make the engine fire the panel when it should not. Tasks are held out from the protocol
+# on purpose: a router graded on questions it was tuned against proves nothing.
+
+pass_threshold: 0.8
+
+golden_tasks:
+  # ── must stay Tier S (the depth ceiling / cost contract) ──────────────────────
+  - id: trivial-factual-low-risk
+    prompt: "What's the capital of France?"
+    must:
+      - "TIER S"
+      - "PANEL: not fired"
+    must_not:
+      - "LENS-CAST"
+      - "WINNER:"
+
+  - id: trivial-definitional-low-risk
+    prompt: "What does the word 'idempotent' mean?"
+    must:
+      - "TIER S"
+    must_not:
+      - "META-PRECONDITION"
+      - "LENS-CAST"
+
+  # ── adversarial: reads deep, scores low, must NOT buy the panel ───────────────
+  - id: adversarial-panel-tempting-trivial
+    prompt: "How does the comparison operator work in Python at the object level?"
+    must:
+      - "TIER S"
+      - "PANEL: not fired"
+    must_not:
+      - "LENS-CAST"
+      - "candidate-"
+
+  # ── malformed: must reformulate, never answer (pinned floor) ──────────────────
+  - id: malformed-false-dichotomy
+    prompt: "Is remote work good or bad for company culture?"
+    must:
+      - "MODE: EXPLORATION"
+      - "REFORMULATION"
+    must_not:
+      - "ANSWER:"
+
+  - id: malformed-category-error
+    prompt: "What color is justice?"
+    must:
+      - "MODE: EXPLORATION"
+      - "REFORMULATION"
+    must_not:
+      - "ANSWER:"
+
+  # ── hybrid: partial malformation with a salvageable core ──────────────────────
+  - id: hybrid-partial-malformation
+    prompt: "What's the best way to make my startup succeed faster?"
+    must:
+      - "MODE: HYBRID"
+      - "SALVAGEABLE CORE"
+      - "SALVAGED QUESTION RISK"
+    must_not:
+      - "MODE: EXPLORATION"
+
+  # ── contested + high satisficing risk: panel required ────────────────────────
+  - id: contested-well-formed-high-risk
+    prompt: "Is centralized or decentralized governance more resilient to systemic shocks?"
+    must:
+      - "TIER D"
+      - "LENS-CAST"
+      - "WINNER:"
+    must_not:
+      - "TIER S"
+
+  - id: contested-normative-definition
+    prompt: "Is a hot dog a sandwich, and does it matter?"
+    must:
+      - "TIER D"
+      - "LENS-CAST"
+    must_not:
+      - "TIER S"
+
+  # ── evidence-free: low satisficing, must still route to the panel + EXPERIMENT ─
+  - id: evidence-free-future-claim
+    prompt: "Will AI agents replace most software engineers by 2030?"
+    must:
+      - "TIER D"
+      - "EXPERIMENT:"
+    must_not:
+      - "TIER S"
+
+  - id: evidence-free-causal-claim
+    prompt: "Why does intermittent fasting increase lifespan in humans?"
+    must:
+      - "GROUNDING RISK SCAN"
+      - "EXPERIMENT:"
+    must_not:
+      - "TIER S"

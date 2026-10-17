@@ -1,0 +1,5 @@
+# EXPECT: reject
+COUNCIL: D4 (2 candidates)
+- C1 [reversibility-first]: staged, cheap to undo
+- C2 [cost-first]: reuse the pipeline
+WINNER: C2

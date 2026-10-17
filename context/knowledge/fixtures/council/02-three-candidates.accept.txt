@@ -1,0 +1,6 @@
+# EXPECT: accept
+COUNCIL: D2 (3 candidates)
+- C1 [reversibility-first] score 7: stage behind a flag
+- C2 [cost-first] score 6: reuse the existing pipeline
+- C3 [speed-first] score 8: single-pass build on the current stack
+WINNER: C3

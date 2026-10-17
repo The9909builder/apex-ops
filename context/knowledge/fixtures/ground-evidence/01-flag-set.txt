@@ -1,0 +1,7 @@
+# EXPECT: reject
+GROUNDED   : YES
+  ACTOR    : roshish
+  COST     : minimal
+  EVIDENCE : flag set: ground=ok
+  Crux     : the mechanism involves token rotation
+  Verdict  : YES

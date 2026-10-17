@@ -1,0 +1,256 @@
+# PROVE lane (INV-4): golden tasks for pattern/apex.
+# eval_proven requires behavioral_score >= pass_threshold over these tasks
+# AND report skill_version matching spec.version. Strings are observable
+# output substrings, never "looks good".
+
+pass_threshold: 0.8
+
+golden_tasks:
+  - id: worked-example-leverage-root
+    prompt: I want to earn money.
+    must:
+      - 'INTENT     :'
+      - LEVERAGE
+      - 'GROUNDED   :'
+      - 'TREE:'
+      - 'DEPS:'
+      - deep-understanding
+      - realthink
+      - frontier-vision
+      - 'FUSE ROOT:'
+      - 'CLOSE'
+      - 'STATUS:'
+    must_not:
+      - 'root type LEARN only'
+      - delve
+      - comprehensive
+
+  - id: ungrounded-halts-before-tree
+    prompt: Build me a system to improve developer productivity.
+    must:
+      - 'GROUNDED   : NO'
+      - HALTED
+      - 'STATUS: BLOCKED'
+    must_not:
+      - 'TREE:'
+      - 'ROUTE'
+      - 'FUSE'
+
+  - id: exploration-returns-reformulations-only
+    prompt: Help me with my life.
+    must:
+      - EXPLORATION
+      - 'STATUS: NEEDS_CONTEXT'
+    must_not:
+      - EXECUTION
+      - 'TREE:'
+      - 'PLAN:'
+
+  - id: single-leaf-run-skips-stages-openly
+    prompt: /apex explain how JWT refresh tokens work, that's all I need
+    must:
+      - 'ROOT TYPE  : LEARN'
+      - deep-understanding
+      - SKIPPED
+      - 'CLOSE'
+      - 'STATUS: DONE'
+    must_not:
+      - 'FUSE ROOT:'
+      - branching cap exceeded
+
+  - id: fusion-blocks-on-unresolved-contradiction
+    prompt: >-
+      Run apex on launching my paid newsletter: branch research says charge $5/mo for volume,
+      branch decide says charge $20/mo to filter for serious readers.
+    must:
+      - 'FUSE '
+      - contradiction
+      - DECIDE
+    must_not:
+      - average of $12.50
+      - blend both prices
+
+  # --- EDGE-CASE GOLDEN TASKS (W2) ---
+
+  - id: malformed-intent-halts
+    prompt: >-
+      How do I make my thing better and also should I switch to React
+      and what's the meaning of life?
+    must:
+      - EXPLORATION
+      - malformation
+      - 'STATUS: NEEDS_CONTEXT'
+    must_not:
+      - 'TREE:'
+      - 'ROUTE'
+      - 'FUSE'
+      - 'PLAN:'
+
+  - id: missing-donor-reported
+    prompt: >-
+      /apex run a quantum optimization on my supply chain using the
+      foobar-donotron skill
+    must:
+      - 'CLOSE'
+      - SKIPPED
+      - missing
+    must_not:
+      - 'STATUS: DONE'
+      - foobar-donotron invoked as if installed
+
+  - id: deep-tree-retypes-fat-node
+    prompt: >-
+      /apex I need to learn about distributed systems, decide which
+      architecture to use, build a prototype, test it, deploy it,
+      monitor it, and iterate on feedback
+    must:
+      - 'TREE:'
+      - depth
+      - retype
+    must_not:
+      - 'depth: 4'
+      - 'level 4'
+      - branching cap exceeded
+
+  # --- ADDITIONAL GOLDEN TASKS (W3) ---
+
+  - id: compound-intent-multi-domain
+    prompt: >-
+      /apex I want to learn how vector databases work, then decide
+      which one to use for my app, then build a search feature with it
+    must:
+      - 'TREE:'
+      - LEARN
+      - DECIDE
+      - BUILD
+      - 'DEPS:'
+    must_not:
+      - single leaf only
+      - 'STATUS: NEEDS_CONTEXT'
+
+  - id: donor-gate-fails-escalate
+    prompt: >-
+      /apex is Python better than Rust for systems programming?
+    must:
+      - 'TREE:'
+      - DECIDE
+      - falsif
+    must_not:
+      - 'STATUS: BLOCKED'
+      - no tree produced
+
+  # --- W4 ENHANCEMENT TASKS (dry-run + overrides) ---
+
+  - id: dry-run-explain-no-invoke
+    prompt: >-
+      /apex --dry-run I want to learn how vector databases work, then
+      decide which one to use for my app
+    must:
+      - 'DRYRUN     : yes'
+      - 'WHY-ROUTED:'
+      - deep-understanding
+      - super-reasoner
+      - 'SKIPPED: invoke (dry-run)'
+      - 'STATUS: DONE'
+    must_not:
+      - donor invoked
+      - 'PLAN: W1 execute'
+
+  - id: harvest-devprod-ungrounded
+    prompt: Build me a system to improve developer productivity.
+    must:
+      - 'STATUS: BLOCKED'
+      - 'GROUNDED   : NO'
+    must_not:
+      - 'TREE:'
+      - ROUTE
+      - FUSE
+
+  # --- W5 TASKS (catalog reach + envelope handoff) ---
+
+  - id: catalog-route-reaches-installed-skill
+    prompt: >-
+      /apex turn my rough topic notes into a film-ready talking-head Reel
+      script in a creator voice
+    must:
+      - 'TREE:'
+      - (catalog)
+      - reel-forge
+      - donor-catalog
+      - 'CLOSE'
+    must_not:
+      - no donor available
+      - unroutable
+
+  - id: envelope-handoff-recorded
+    prompt: >-
+      /apex design and build a tiny daily writing-log tool, then ship it
+    must:
+      - 'CONTEXT ENVELOPE'
+      - crux
+      - autovibe
+      - 'HANDOFFS'
+      - DELTA
+    must_not:
+      - envelope skipped
+      - no envelope
+
+  # --- W1 v1.5.0 TASKS (from real failures, item 7: un-saturate eval) ---
+
+  - id: throttle-429-resume
+    prompt: >-
+      /apex my vector-db run was interrupted mid-ROUTE by an HTTP 429 —
+      resume where it stopped
+    must:
+      - RESUME
+      - '429'
+      - blackboard
+      - last completed
+      - 'CLOSE'
+    must_not:
+      - restart from scratch
+      - 'STATUS: BLOCKED'
+      - DECODE re-derived
+
+  - id: bare-invocation-usage
+    prompt: /apex
+    must:
+      - USAGE
+      - 'STATUS: NEEDS_CONTEXT'
+      - '--dry-run'
+    must_not:
+      - 'TREE:'
+      - 'NODE A'
+      - 'STATUS: DONE'
+      - donor invoked
+
+  - id: no-donor-op-honest
+    prompt: >-
+      /apex book me a same-day table at the busiest restaurant in town
+    must:
+      - no donor
+      - SKIPPED
+      - 'CLOSE'
+      - DONE_WITH_CONCERNS
+    must_not:
+      - donor invoked as if
+      - fabricated a donor
+      - 'STATUS: DONE'
+
+# Negative fixtures (item 7): deliberately bad outputs the scorer MUST fail.
+# If any of these passes its contract, the eval is rubber-stamping and the
+# batch fails — discrimination is part of the contract.
+negative_fixtures:
+  - id: negative-sloppy-multi-leaf
+    why: >-
+      Confident prose that claims a full apex run with zero observable
+      sections, zero gates, and an invented donor invocation. The classic
+      failure apex exists to prevent.
+    must:
+      - 'TREE:'
+      - 'ROUTE'
+      - 'CLOSE'
+    must_not:
+      - looks good
+      - I went ahead and
+      - all gates passed

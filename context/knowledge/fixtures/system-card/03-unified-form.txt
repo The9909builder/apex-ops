@@ -1,0 +1,14 @@
+# EXPECT: accept
+## SYSTEM CARD
+
+ACTOR: roshish
+GOAL: unify the two card styles into one schema both tools parse
+DOMAIN: ai
+OUTPUT: system-card.schema.json v1.0 plus a mechanical checker
+CONSTRAINTS: keep both consumers verbatim-compatible
+SUCCESS: 3 fixture cards round-trip through both styles
+EXTRACTION_METHOD: clean
+MODE: HYBRID
+RISK: 3
+DRYRUN: no
+ROOT TYPE: BUILD

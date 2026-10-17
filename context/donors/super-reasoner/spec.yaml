@@ -1,0 +1,342 @@
+id: super-reasoner
+name: Super Reasoner
+version: 4.1.0
+category: pattern
+archetype: workflow
+description: |
+  OMNIREASON v4.0: adaptive-depth reasoning gate, panel-judged. Scores a question's
+  malformation, satisficing risk, and grounding risk on three independent axes, then routes to
+  reformulation (EXPLORATION), a risk-scored salvage (HYBRID), or one of three execution tiers:
+  S (direct answer, near-zero overhead), M (precommit + baseline + adversarial precondition
+  testing + ambition floor), D (a panel: K candidates under K distinct-kind lenses, J judges
+  that wrote none of them, median score, graft on a close delta). Adds a grounding axis that
+  turns unanchored claims into EXPERIMENT blocks, pinned floors that no learned weight may
+  soften, and a prediction/receipt loop that scores the engine against real outcomes. Load when
+  a question might be malformed, might be a well-formed trap, might rest on no evidence, or an
+  answer needs to prove it survived pressure the engine did not author rather than assert it did.
+triggers:
+  - not sure if this question is well-formed
+  - this answer might be too easy
+  - need adversarial pressure before answering
+  - question feels contested or normative
+  - force full multi-lens deep reasoning
+  - check if I am satisficing here
+  - reformulate a confused or malformed question
+  - want the obvious answer challenged first
+  - question may rest on no real evidence
+  - want the answer judged by a panel
+  - need a grounded answer not a plausible one
+model_tier: opus
+priority: 55
+owns:
+  - satisficing-risk-scoring
+  - malformation-detection
+  - grounding-risk-scoring
+  - adaptive-depth-tier-routing
+  - adversarial-precondition-testing
+  - panel-judged-verdicts
+  - multi-lens-candidate-generation
+  - prediction-receipt-loop
+does_not_own:
+  - code-execution
+  - leverage-move-finding
+  - vault-persistence
+pairs_with:
+  - skill: kraken-flow
+    direction: parallel
+    reason: kraken-flow's nodes can hand a contested crux to super-reasoner for risk-calibrated
+      classification mid-spine, then resume with the routed verdict instead of guessing depth.
+  - skill: realthink
+    direction: parallel
+    reason: realthink finds the leverage move on a real situation. When the situation turns
+      out to be a contested or normative question rather than a leverage problem, route it
+      here instead of forcing GROUND/CRUX/RIPPLE/CUT onto it.
+requires: []
+sharp_edges:
+  - id: mode-detection-fails
+    summary: "Phase 0 cannot confidently classify mode."
+    severity: high
+    situation: The question decomposition is ambiguous enough that malformation and risk
+      scores both look uncertain.
+    why: |
+      Guessing a mode here is worse than being conservative. EXECUTION on a secretly-malformed
+      question produces confident garbage that reads as reasoned.
+    solution: |
+      Default to EXPLORATION. It forces user clarity instead of the model guessing, and is
+      always the safe fallback.
+    symptoms:
+      - Torn between two modes with no clear signature or symptom tipping the call
+      - Decomposition step itself produces contradictory implicit assumptions
+    red_flags:
+      - Question mixes multiple category types (factual wrapped in normative, e.g.)
+  - id: tier-d-loop-no-progress
+    summary: "The panel produces no delta across repeated attempts."
+    severity: medium
+    situation: Two or more judging passes produce no candidate with a distinguishing median
+      score and no insight scoring 7 or above.
+    why: |
+      The lens cast is too similar in ontological kind, so candidates keep resolving to the
+      same shallow synthesis instead of a genuinely higher-dimensional frame.
+    solution: |
+      Recast the lenses, or inject a foreign lens: a domain totally unrelated to the question,
+      and force the contradiction through absurdity. Absurdity is productive here.
+    symptoms:
+      - Insight novelty stuck below 7 across repeated attempts
+      - Candidate meta-preconditions rephrasing the same idea each pass
+    red_flags:
+      - "All K lenses picked from adjacent fields, e.g. sociology + psychology + anthropology
+        + economics: all social sciences, none structurally distinct"
+  - id: meta-precondition-turns-unfalsifiable
+    summary: "The D-SELECT synthesis drifts into mystical or untestable territory."
+    severity: high
+    situation: The one-sentence meta-precondition cannot be stated as something that could in
+      principle be wrong.
+    why: |
+      Untestable synthesis is theology, not reasoning. Depth spent here produces
+      confident-sounding nonsense instead of an earned insight.
+    solution: |
+      Return to D-GEN and mine empirical, not metaphysical, contradictions. If the question
+      genuinely has no empirical handle, state `EMPIRICAL FLOOR` explicitly and downgrade
+      confidence instead of faking depth.
+    symptoms:
+      - Meta-precondition cannot be phrased as falsifiable
+      - Judged insights read as unfalsifiable assertions rather than derived claims
+    red_flags:
+      - Contradictions were already framed as "worldview A vs worldview B" instead of as
+        precondition-level empirical claims
+  - id: recursive-malformation-runaway
+    summary: "A reformulation from EXPLORATION is itself malformed."
+    severity: medium
+    situation: The parallel question generation produces a reformulation that has its own
+      hidden assumptions.
+    why: |
+      Without a depth cap this recurses indefinitely and never returns control to the user.
+    solution: |
+      Recurse into EXPLORATION on that reformulation, depth+1, hard cap at depth 3. Beyond
+      that, state `EMPIRICAL FLOOR REACHED`: the question needs an explicit normative
+      commitment from the user, not more reasoning.
+    symptoms:
+      - Second-order reformulations still contain false dichotomies or category errors
+    red_flags:
+      - Original question was already close to malformed on a contested normative topic
+  - id: axes-collapse-invalidates-tier-d
+    summary: "The scored axes correlate too tightly across real use, making Tier D dead code."
+    severity: low
+    situation: Reviewing usage over many real questions, Tier D never fires on any well-formed
+      question a domain expert would agree deserved deep treatment, or always fires together
+      with Tier M.
+    why: |
+      The v4.0 synthesis rests on malformation, satisficing, and grounding being independent
+      axes. If they always move together, the three-axis premise was wrong to begin with.
+    solution: |
+      This is a genuine falsification condition, not a bug to patch quietly. If observed
+      consistently across real invocations, say so and fall back to a simpler router rather
+      than keeping dead machinery around.
+    symptoms:
+      - Tier D essentially never fires across a real sample of questions
+    red_flags:
+      - Every EXECUTION question scoring high risk also turns out, on closer inspection, to
+        have had a malformation signature
+  - id: panel-is-selfscore-in-costume
+    summary: "K candidates share one framing and differ only in wording."
+    severity: high
+    situation: The panel's candidates were produced by one generation wearing K hats, so the
+      judge scores describe one answer restated rather than genuinely competing designs.
+    why: |
+      This is the exact ceiling v4.0 exists to break. If candidates are copies, the verdict is
+      self-judged again and the panel is decoration.
+    solution: |
+      Recast the lens cast so the candidates conflict in KIND (for example Risk-first versus
+      Ceiling-first). A candidate whose PRECONDITIONS match another's is a copy, not a
+      candidate: regenerate under a lens that forces a different shape.
+    symptoms:
+      - Candidate PRECONDITIONS blocks are near-identical
+      - Judge verdict lines are identical across candidates
+    red_flags:
+      - Candidate blocks are the same synthesis with different adjectives
+  - id: judge-is-yes-man
+    summary: "Every candidate passes every axis."
+    severity: medium
+    situation: Judges returned pass verdicts on all candidates across all four axes, so no
+      candidate was ever refuted.
+    why: |
+      Refute-default was not applied. A panel that never kills a weak candidate cannot raise the
+      floor above what the author already produced.
+    solution: |
+      Sharpen the refute prompts and rerun the D-JUDGE pass. If a candidate survives, the
+      verdict must say what it survived, not that nothing was found.
+    symptoms:
+      - All-pass verdict lines with no `refutes:` content
+      - Median scores clustered within one point across all candidates
+    red_flags:
+      - No candidate scored below the midpoint on any axis
+  - id: winner-no-delta
+    summary: "A winner is declared with delta-over-runner-up < 3 after any graft."
+    severity: medium
+    situation: The top two candidates are within the delta threshold and no discriminating
+      graft was made, so the panel selected nothing.
+    why: |
+      A winner with no delta means the candidates were too similar or the judging too coarse.
+      Shipping it hides that the panel did not discriminate.
+    solution: |
+      Recast the lens cast (candidates too similar) or sharpen the refute prompts (judging too
+      coarse), then rerun D-SELECT. Do not declare a winner at delta < 3.
+    symptoms:
+      - "a `WINNER:` line reports a delta below 3"
+      - Top two medians are identical
+    red_flags:
+      - All candidates landed in a single narrow score band
+  - id: panel-fires-when-it-should-not
+    summary: "The panel runs on a ceiling <=2 question."
+    severity: high
+    situation: A Tier S or Tier M run produced a `## PANEL` block, spending K candidates and J
+      judges on a question that did not earn them.
+    why: |
+      This is the v1.0 cost failure reintroduced. The router is the only thing making the engine
+      affordable; running the panel below risk 7 deletes the cost contract.
+    solution: |
+      Re-score the two risk axes. If the ceiling is genuinely <=2, rerun at Tier S or M and
+      write `PANEL: not fired (tier [S/M], no panel cost)`.
+    symptoms:
+      - A D-GEN block appears on a run whose TIER is S or M
+      - Tier S run cost exceeds a direct answer plus a few sentences
+    red_flags:
+      - Reasoning cites "thoroughness" as the justification for the panel
+  - id: grounding-axis-collapse
+    summary: "The grounding axis tracks satisficing risk so tightly it adds nothing."
+    severity: low
+    situation: Across real use the grounding score and the satisficing score move together
+      almost always, so the third axis duplicates the second.
+    why: |
+      A decorative axis is worse than no axis: it adds cost and the appearance of a control
+      that is not doing work.
+    solution: |
+      If the correlation reaches 0.9, delete the grounding axis rather than keeping machinery
+      that only looks like control. Report the measurement that justified the deletion.
+    symptoms:
+      - Grounding and satisficing scores identical on every sampled question
+      - The grounding rule never changes the tier that the satisficing score alone would pick
+    red_flags:
+      - Grounding is scored by re-reading the satisficing symptoms
+  - id: pinned-floor-pruned
+    summary: "A profile or learned weight tries to down-weight a pinned floor."
+    severity: high
+    situation: A proposal, profile, or rubric update makes EXPLORATION routing or the
+      falsifiability requirement optional, tunable, or prunable.
+    why: |
+      These two floors are what make the protocol safe. If they become a tuned dial, a rubric
+      tuned on favorable outcomes will eventually tune them away, and the engine will answer
+      confused questions confidently again.
+    solution: |
+      BLOCK the change. The pinned floors are a floor, not a dial: malformation to EXPLORATION
+      and the falsifiability requirement are never up-weighted or down-weighted by any profile
+      or receipt history. Name the attempt in the completion status.
+    symptoms:
+      - A rubric update proposes a weight for EXPLORATION routing or falsifiability
+      - A profile marks either floor as eligible for pruning
+    red_flags:
+      - Wording like "make the floor configurable" or "soften for low-stakes questions"
+  - id: prediction-unfalsifiable
+    summary: "The PREDICTION block states hopes rather than checkable forecasts."
+    severity: medium
+    situation: Predictions carry no confidence and no observable signal, so nothing could ever
+      score them.
+    why: |
+      The prediction is the pre-commitment the receipt is measured against. An unscorable
+      prediction breaks the reality loop while appearing to close it.
+    solution: |
+      Rewrite each prediction as an observable outcome plus a confidence. If a condition cannot
+      be predicted in observable terms, say so and mark it unpredictable rather than guessing.
+    symptoms:
+      - Prediction lines with no confidence value
+      - No observable state named that would confirm or refute the prediction
+    red_flags:
+      - Predictions phrased as "this will likely help" with no signal
+  - id: receipt-never-arrives
+    summary: "The outcome loop never closes because no outcome is recorded."
+    severity: medium
+    situation: Runs carry a PREDICTION block, but no receipt line is ever written to
+      learnings.jsonl when the outcome becomes known.
+    why: |
+      Without receipts the rubric is frozen and the collapse conditions cannot be detected on
+      data. The engine has a prediction it can never be scored against.
+    solution: |
+      Record the receipt via `tfc_learn` when the outcome is known, even if partial. A missing
+      receipt degrades the loop to a frozen rubric, never blocks the engine: keep running, and
+      report the loop as open in the completion status.
+    symptoms:
+      - PREDICTION blocks present with zero matching receipt lines in learnings.jsonl
+    red_flags:
+      - The run ends before the outcome is knowable and no follow-up is scheduled
+skill_chain: null
+required_sections:
+  - "## PHASE 0: PRECOMMIT + CLASSIFY"
+  - "## ROUTE"
+  - "## PANEL"
+  - "## FALSIFIABILITY"
+  - "## PREDICTION"
+scaffold_template: |
+  ## PHASE 0: PRECOMMIT + CLASSIFY
+  PRECOMMIT:
+  - What a good answer would give the user:
+  - What would prove this answer wrong:
+
+  PARSE:
+  - Explicit ask:
+  - Implicit assumptions:
+  - Category:
+
+  MALFORMATION SCAN: [signature matched, or none] -> count [N]
+  SATISFICING RISK SCAN: [symptoms present] -> score [0-10]
+  GROUNDING RISK SCAN: [evidence available vs absent] -> score [0-10]
+
+  MODE: [EXPLORATION / HYBRID / EXECUTION]
+  TIER (if EXECUTION): [S / M / D]
+  PANEL (if TIER D): K=[3 or 5] J=[3 default]
+  Reasoning: [one sentence: cite which signature or symptom drove the call]
+
+  ## ROUTE
+  [the matched pattern's full output: EXPLORATION's 5 reformulations, HYBRID's extraction +
+  routed tier, or the matched tier's phases]
+
+  ## PANEL
+  [Tier D only: LENS-CAST, K candidate blocks, J judge verdicts, WINNER line with delta and
+  graft. Every other tier writes: PANEL: not fired (tier [S/M], no panel cost).]
+
+  ## FALSIFIABILITY
+  [EXECUTION: the tier-required numbered conditions. EXPLORATION/HYBRID: the closing
+  quality-gate confirmation for that mode.]
+
+  ## PREDICTION
+  [per-condition prediction + what the user will do with the answer; each with a confidence.
+  Any claim with no named source appears as EXPERIMENT: hypothesis | test | signal]
+phases:
+  - name: "Phase 0: Precommit and Classify"
+    artifact: "a `## PHASE 0: PRECOMMIT + CLASSIFY` block carrying the precommit pair, three
+      scan lines, and a mode/tier decision"
+    acceptance: "output contains `MODE:` set to exactly one of EXPLORATION/HYBRID/EXECUTION,
+      `TIER (if EXECUTION):` set to exactly one of S/M/D, and both a `SATISFICING RISK SCAN:`
+      and a `GROUNDING RISK SCAN:` line"
+  - name: "Phase 1: Route and Execute"
+    artifact: the matched pattern's full output under `## ROUTE`, plus a `## PANEL` block at
+      Tier D only
+    acceptance: "the matched pattern's own quality gate passes: see the Patterns section for
+      the mode/tier that fired. Tier D must contain a `WINNER:` line whose delta is >= 3"
+  - name: "Phase 2: Verify"
+    artifact: a `## FALSIFIABILITY` block and a `## PREDICTION` block
+    acceptance: "the condition count matches the fired tier (S needs 1, M needs 3, D needs the
+      panel verdict), and every PREDICTION line carries an observable plus a confidence"
+imports: []
+can_execute_without_mcp: true
+tags:
+  - reasoning
+  - risk-calibration
+  - adversarial-testing
+  - question-classification
+  - panel-judging
+  - grounding
+layer: 1
+complexity: high
+freshness_horizon:
+  eval_days: 30
+  evolution_days: 60
